@@ -609,7 +609,7 @@
         });
     }
 
-    // ALGORITMA PEMBAGIAN TUGAS RA (STAYOVER MERATA TERLEBIH DAHULU)
+    // ALGORITMA PEMBAGIAN TUGAS RA (STAYOVER & TURNDOWN DIBAGI RATA)
     function generateRADistribution(raNeeded, totalCredit, targetCredit, qtyMap, weightMap) {
         const listContainer = document.getElementById("raAllocationList");
         if (!listContainer) return;
@@ -630,22 +630,25 @@
             });
         }
 
-        let totalStayQty = qtyMap.stayover;
-        let stayWeight = weightMap.stayCredit;
+        // Helper Function: Membagi item secara merata ke seluruh RA
+        function distributeEqually(taskName, totalQty, weight) {
+            if (totalQty > 0 && weight > 0) {
+                let perRA = Math.floor(totalQty / raNeeded);
+                let remainder = totalQty % raNeeded;
 
-        // 1. BAGI STAYOVER SECARA MERATA KE SEMUA RA
-        if (totalStayQty > 0 && stayWeight > 0) {
-            let stayPerRA = Math.floor(totalStayQty / raNeeded);
-            let stayRemainder = totalStayQty % raNeeded;
-
-            for (let i = 0; i < raNeeded; i++) {
-                let assignedStay = stayPerRA + (i < stayRemainder ? 1 : 0);
-                if (assignedStay > 0) {
-                    raAllocations[i].tasks["Stayover"] = assignedStay;
-                    raAllocations[i].credit += assignedStay * stayWeight;
+                for (let i = 0; i < raNeeded; i++) {
+                    let assigned = perRA + (i < remainder ? 1 : 0);
+                    if (assigned > 0) {
+                        raAllocations[i].tasks[taskName] = (raAllocations[i].tasks[taskName] || 0) + assigned;
+                        raAllocations[i].credit += assigned * weight;
+                    }
                 }
             }
         }
+
+        // 1. BAGI STAYOVER & TURN DOWN SECARA MERATA KE SEMUA RA
+        distributeEqually("Stayover", qtyMap.stayover, weightMap.stayCredit);
+        distributeEqually("Turn Down", qtyMap.turndown, weightMap.turnCredit);
 
         // 2. SISA TUGAS LAINNYA (DROPPED -> DEPARTURE -> PICK-UP)
         let otherTasks = [
@@ -664,7 +667,7 @@
                 let currentTask = otherTasks[taskIndex];
                 let remainingCapacity = targetCredit - ra.credit;
 
-                // Jika bukan RA terakhir dan kapasitas kredit tersisa tidak cukup 1 kamar, lanjut ke RA berikutnya
+                // Jika bukan RA terakhir dan sisa kapasitas kredit kurang dari bobot 1 kamar, pindah ke RA berikutnya
                 if (!isLastRA && remainingCapacity < currentTask.weight) {
                     break;
                 }
