@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MANNING BREAKDOWN</title>
+    <title>HK MANNING CALCULATOR</title>
     <!-- FontAwesome Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 CSS & JS -->
@@ -94,10 +94,11 @@
         .swal-ra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 200px; overflow-y: auto; padding: 4px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
         .swal-ra-input { font-size: 12px !important; padding: 6px 8px !important; margin: 0 !important; height: 32px !important; width: 100% !important; }
 
-        /* PRINT ONLY ELEMENT (HIDDEN ON SCREEN) */
+        /* PRINT ONLY ELEMENT (SEMBUNYIKAN DI TAMPILAN APLIKASI) */
         .print-only-header { display: none; }
+        .print-table { display: none; } /* <-- REVISI: Sembunyikan tabel cetak pada antarmuka aplikasi */
 
-        /* PRINT STYLESHEET */
+        /* PRINT STYLESHEET (HANYA AKTIF SAAT PROCESS PRINT/PDF) */
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
             .pos-header, .left-panel, .receipt-card, .staff-summary-card, .btn-action-group, .btn-settings, .pos-card h3 { display: none !important; }
@@ -107,8 +108,8 @@
             .print-only-header h2 { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #000; letter-spacing: 0.5px; margin-bottom: 4px; }
             .print-only-header p { font-size: 12px; color: #444; margin: 0; }
 
-            /* PRINT TABLE STYLING */
-            .ra-card-list { display: none !important; } /* Sembunyikan list card UI */
+            /* TAMPILKAN TABEL HANYA SAAT CETAK */
+            .ra-card-list { display: none !important; }
             .print-table { display: table !important; width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
             .print-table th, .print-table td { border: 1px solid #000 !important; padding: 8px 10px; text-align: left; vertical-align: middle; }
             .print-table th { background-color: #f2f2f2 !important; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 11px; }
@@ -294,7 +295,7 @@
                 <h3><i class="fa-solid fa-clipboard-user"></i> Room Attendant Distribution</h3>
                 <div id="raAllocationList" class="ra-card-list"></div>
 
-                <!-- TABEL KHUSUS CETAK PRINT -->
+                <!-- TABEL KHUSUS CETAK PRINT (SEMBUNYI DI LAYAR, MUNCUL SAAT DI-PRINT) -->
                 <table id="raPrintTable" class="print-table">
                     <thead>
                         <tr>
@@ -662,7 +663,7 @@
                 specialPrintText = ` | (Less ${deficit} - Special Project / Deep Cleaning)`;
             }
 
-            // 1. POPULATE UI CARD LIST
+            // POPULATE UI CARD LIST
             let raItem = document.createElement("div");
             raItem.className = "ra-item";
             raItem.innerHTML = `
@@ -677,7 +678,7 @@
             `;
             listContainer.appendChild(raItem);
 
-            // 2. POPULATE PRINT TABLE ROW
+            // POPULATE PRINT TABLE ROW (Dipersiapkan untuk cetak saja)
             let tr = document.createElement("tr");
             tr.innerHTML = `
                 <td class="center">${ra.id}</td>
@@ -690,14 +691,12 @@
     }
 
     function printDistribution() {
-        // Set tanggal cetak otomatis untuk header cetakan
         const now = new Date();
         const formattedDate = now.toLocaleDateString('id-ID', { 
             weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
         });
         document.getElementById("printDate").innerText = formattedDate;
 
-        // Buka dialog print bawaan browser
         window.print();
     }
 
