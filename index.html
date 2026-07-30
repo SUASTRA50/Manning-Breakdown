@@ -176,42 +176,7 @@
     </style>
 </head>
 <body>
-<body>
 
-  <div class="card">
-    <h2>Hitung Otomatis</h2>
-    
-    <div class="form-group">
-      <label for="nilaiA">Nilai A / Jumlah</label>
-      <input type="number" id="nilaiA" placeholder="Masukkan angka..." oninput="hitung()">
-    </div>
-
-    <div class="form-group">
-      <label for="nilaiB">Nilai B / Harga Satuan</label>
-      <input type="number" id="nilaiB" placeholder="Masukkan angka..." oninput="hitung()">
-    </div>
-
-    <div class="result-box">
-      <div class="result-title">Hasil Perhitungan:</div>
-      <div class="result-value" id="hasil">0</div>
-    </div>
-  </div>
-
-  <script>
-    function hitung() {
-      // Ambil nilai dari input
-      const inputA = parseFloat(document.getElementById('nilaiA').value) || 0;
-      const inputB = parseFloat(document.getElementById('nilaiB').value) || 0;
-
-      // Rumus kalkulasi sederhana (misal: perkalian)
-      const total = inputA * inputB;
-
-      // Format angka ke format lokal (Rupiah / ribuan)
-      document.getElementById('hasil').textContent = total.toLocaleString('id-ID');
-    }
-  </script>
-
-</body>
 <div class="pos-container">
     <header class="pos-header" style="display: flex; justify-content: space-between; align-items: center;">
     <div class="brand" style="display: flex; align-items: center; gap: 10px;">
