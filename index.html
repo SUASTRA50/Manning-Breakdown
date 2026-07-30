@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housekeeping Workload & Staff Distribution</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HK MANNING CALCULATOR</title>
     <!-- FontAwesome Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -129,9 +132,192 @@
         padding-bottom: 8px;
     }
 }
+        /* 1. TAMPILAN LAYAR APLIKASI (WEB DISPLAY) */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px; color: #333; }
+        .no-print-btn { position: fixed; top: 20px; right: 20px; background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; }
+        .no-print-btn:hover { background-color: #0056b3; }
+        .app-container { max-width: 1100px; margin: 0 auto; }
+        .print-only { display: none; }
+        .header-card { background: #fff; border-radius: 10px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .main-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; }
+        .card { background: #fff; border-radius: 10px; padding: 18px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card-title { font-weight: bold; color: #1e88e5; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; text-transform: uppercase; }
+        .form-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; }
+        .input-box { background: #f4f6f8; border: 1px solid #dcdfe6; border-radius: 6px; padding: 6px 12px; text-align: right; width: 80px; font-weight: 600; }
+        .workload-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .workload-table th { color: #888; font-weight: 500; text-align: left; padding-bottom: 8px; }
+        .workload-table td { padding: 6px 0; }
+        .stat-card { background: #e3f2fd; border-radius: 10px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .stat-number { font-size: 28px; font-weight: bold; color: #1976d2; }
+        .ra-item { border: 1px dashed #bbdefb; background: #f8fbff; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+        .ra-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px; color: #0d47a1; }
+        .ra-role { font-size: 12px; color: #555; }
+
+        /* 2. ATURAN KHUSUS CETAK / PRINT */
+        @media print {
+            @page { size: A4 portrait; margin: 15mm; }
+            body { background: #fff !important; padding: 0 !important; color: #000 !important; font-family: Arial, Helvetica, sans-serif !important; }
+            .app-container, .no-print-btn { display: none !important; }
+            .print-only { display: block !important; }
+            .print-header { text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+            .print-divider { border-bottom: 2px solid #000; margin-bottom: 15px; }
+            .print-meta { display: table; width: 100%; margin-bottom: 15px; font-weight: bold; font-size: 10pt; }
+            .print-meta-left { display: table-cell; text-align: left; }
+            .print-meta-right { display: table-cell; text-align: right; }
+            .print-section { border: 1.5px solid #000; margin-bottom: 15px; }
+            .print-section-title { font-weight: bold; font-size: 10pt; padding: 5px 8px; border-bottom: 1.5px solid #000; background-color: #f2f2f2; }
+            .print-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+            .print-table th, .print-table td { border: 1px solid #000; padding: 5px 8px; }
+            .print-table th { text-align: center; font-weight: bold; }
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .font-bold { font-weight: bold; }
+        }
     </style>
 </head>
- 
+ <body>
+
+    <!-- Tombol untuk trigger cetak -->
+    <button class="no-print-btn" onclick="window.print()">🖨️ Cetak Laporan</button>
+
+    <!-- TAMPILAN DILAYAR (DASHBOARD APLIKASI) -->
+    <div class="app-container">
+        <div class="header-card">
+            <div><h2 style="margin:0; font-size: 18px;">⚙️ MANNING CALCULATOR</h2><small style="color:#666;">Daily Staffing Planner</small></div>
+            <div style="text-align: right;"><span style="font-size:12px; color:#666;">🏢 Capacity</span><br><strong>272 Rooms</strong></div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Kolom Kiri -->
+            <div>
+                <div class="card">
+                    <div class="card-title">👤 Planner Info</div>
+                    <div style="background:#f5f5f5; padding:8px; border-radius:6px; font-size:12px; margin-bottom:10px;"><span>LAST SUBMITTED: <strong>29 Jul 2026 18:50</strong></span><span style="float:right;">PLANNER: <strong>Gosfu</strong></span></div>
+                    <div class="form-group"><span>Planner Name</span><input type="text" class="input-box" value="Gosfu" style="width:120px; text-align:left;"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📈 Hotel Forecast</div>
+                    <div class="form-group"><span>Room sold</span><span class="input-box">218</span></div>
+                    <div class="form-group"><span>Arrival</span><span class="input-box">54</span></div>
+                    <div class="form-group"><span>Departure</span><span class="input-box">86</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🛏️ Dropped Room</div>
+                    <div class="form-group"><span>Left Over / Dropped</span><span class="input-box">6</span></div>
+                    <div class="form-group"><span>Pick-up Room</span><span class="input-box">2</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">⭐ Special Service</div>
+                    <div class="form-group"><span>Turn Down</span><span class="input-box">0</span></div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan -->
+            <div>
+                <div class="card">
+                    <div class="card-title">📊 Workload Summary</div>
+                    <table class="workload-table">
+                        <thead><tr><th>TASK</th><th style="text-align:center;">QTY</th><th style="text-align:center;">WEIGHT</th><th style="text-align:right;">TOTAL</th></tr></thead>
+                        <tbody>
+                            <tr><td>Stayover</td><td align="center"><span class="input-box">132</span></td><td align="center"><span class="input-box">0.9</span></td><td align="right"><strong>118.8</strong></td></tr>
+                            <tr><td>Departure</td><td align="center"><span class="input-box">86</span></td><td align="center"><span class="input-box">1</span></td><td align="right"><strong>86.0</strong></td></tr>
+                            <tr><td>Dropped Room</td><td align="center"><span class="input-box">6</span></td><td align="center"><span class="input-box">1</span></td><td align="right"><strong>6.0</strong></td></tr>
+                            <tr><td>Pick-up</td><td align="center"><span class="input-box">2</span></td><td align="center"><span class="input-box">0.4</span></td><td align="right"><strong>0.8</strong></td></tr>
+                            <tr><td>Turn Down</td><td align="center"><span class="input-box">0</span></td><td align="center"><span class="input-box">0.2</span></td><td align="right"><strong>0.0</strong></td></tr>
+                        </tbody>
+                    </table>
+                    <hr style="border:none; border-top:1px solid #eee; margin:15px 0;">
+                    <div class="form-group"><span><strong>Total Cleaning Credit</strong></span><span style="font-size:18px; color:#1976d2; font-weight:bold;">211.6</span></div>
+                    <div class="form-group"><span>Credit / RA Capacity</span><span class="input-box">14</span></div>
+                    <div class="form-group"><span>Supervisor Goal</span><span class="input-box">17</span></div>
+                </div>
+
+                <div class="stat-card">
+                    <div><strong>Required Room Attendant</strong><br><small style="color:#666;">Active Staff Needed</small></div>
+                    <div class="stat-number">16</div>
+                </div>
+
+                <div class="stat-card">
+                    <div><strong>Required Supervisor</strong><br><small style="color:#666;">Active Staff Needed</small></div>
+                    <div class="stat-number">4</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">👥 Room Attendant Distribution</div>
+                    <div class="ra-item"><div class="ra-header"><span>👤 RA 1</span><span>14.1 Credit</span></div><div class="ra-role">Role/Tugas: 13 Stayover + 2 Dropped + 1 Pick-up</div></div>
+                    <div class="ra-item"><div class="ra-header"><span>👤 RA 2</span><span>14.1 Credit</span></div><div class="ra-role">Role/Tugas: 13 Stayover + 2 Dropped + 1 Pick-up</div></div>
+                    <div class="ra-item"><div class="ra-header"><span>👤 RA 3</span><span>13.7 Credit</span></div><div class="ra-role">Role/Tugas: 13 Stayover + 2 Dropped</div></div>
+                    <div class="ra-item"><div class="ra-header"><span>👤 RA 4</span><span>13.7 Credit</span></div><div class="ra-role">Role/Tugas: 13 Stayover + 2 Departure</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMAT HASIL CETAK / PRINT -->
+    <div class="print-only">
+        <div class="print-header">HOUSEKEEPING WORKLOAD & STAFF DISTRIBUTION</div>
+        <div class="print-divider"></div>
+
+        <div class="print-meta">
+            <div class="print-meta-left">Date: Kamis, 30 Juli 2026</div>
+            <div class="print-meta-right">Planner: Gosfu</div>
+        </div>
+
+        <!-- 1. WORKLOAD SUMMARY -->
+        <div class="print-section">
+            <div class="print-section-title">1. WORKLOAD SUMMARY</div>
+            <table class="print-table">
+                <thead>
+                    <tr><th style="width: 45%; text-align: left;">TASK</th><th style="width: 15%;">QTY</th><th style="width: 15%;">WEIGHT</th><th style="width: 25%;">TOTAL CREDIT</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Stayover</td><td class="text-center">132</td><td class="text-center">0.9</td><td class="text-right">118.8</td></tr>
+                    <tr><td>Departure</td><td class="text-center">86</td><td class="text-center">1</td><td class="text-right">86.0</td></tr>
+                    <tr><td>Dropped Room</td><td class="text-center">6</td><td class="text-center">1</td><td class="text-right">6.0</td></tr>
+                    <tr><td>Pick-up</td><td class="text-center">2</td><td class="text-center">0.4</td><td class="text-right">0.8</td></tr>
+                    <tr><td>Turn Down</td><td class="text-center">0</td><td class="text-center">0.2</td><td class="text-right">0.0</td></tr>
+                    <tr><td colspan="3" class="text-right font-bold">Total Cleaning Credit</td><td class="text-right font-bold">211.6</td></tr>
+                    <tr><td colspan="3" class="text-right font-bold">Credit / RA Capacity</td><td class="text-right">14</td></tr>
+                    <tr><td colspan="3" class="text-right font-bold">Supervisor Goal</td><td class="text-right">17</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 2. MANNING REQUIRED -->
+        <div class="print-section">
+            <div class="print-section-title">2. MANNING REQUIRED</div>
+            <table class="print-table">
+                <thead>
+                    <tr><th style="width: 65%; text-align: left;">ROLE / POSITION</th><th style="width: 35%;">ACTIVE STAFF NEEDED</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Required Room Attendant</td><td class="text-center font-bold">16</td></tr>
+                    <tr><td>Required Supervisor</td><td class="text-center font-bold">4</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3. ROOM ATTENDANT DISTRIBUTION -->
+        <div class="print-section">
+            <div class="print-section-title">3. ROOM ATTENDANT DISTRIBUTION</div>
+            <table class="print-table">
+                <thead>
+                    <tr><th style="width: 20%;">STAFF</th><th style="width: 60%; text-align: left;">ROLE / ASSIGNMENT</th><th style="width: 20%;">CREDIT</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="text-center font-bold">RA 1</td><td>13 Stayover + 2 Dropped + 1 Pick-up</td><td class="text-center">14.1</td></tr>
+                    <tr><td class="text-center font-bold">RA 2</td><td>13 Stayover + 2 Dropped + 1 Pick-up</td><td class="text-center">14.1</td></tr>
+                    <tr><td class="text-center font-bold">RA 3</td><td>13 Stayover + 2 Dropped</td><td class="text-center">13.7</td></tr>
+                    <tr><td class="text-center font-bold">RA 4</td><td>13 Stayover + 2 Departure</td><td class="text-center">13.7</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
 <body>
 
 <div class="pos-container">
