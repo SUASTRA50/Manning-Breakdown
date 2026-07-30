@@ -148,11 +148,11 @@
                 <h3><i class="fa-solid fa-bed"></i> Dropped Room</h3>
                 <div class="input-group">
                     <label for="backlog">Left Over / Dropped</label>
-                    <input type="number" id="backlog" placeholder="0" min="0" required>
+                    <input type="number" id="backlog" placeholder="0" min="0">
                 </div>
                 <div class="input-group">
                     <label for="pickup">Pick-up Room</label>
-                    <input type="number" id="pickup" placeholder="0" min="0" required>
+                    <input type="number" id="pickup" placeholder="0" min="0">
                 </div>
             </div>
 
@@ -160,7 +160,7 @@
                 <h3><i class="fa-solid fa-star"></i> Special Service</h3>
                 <div class="input-group">
                     <label for="turndown">Turn Down</label>
-                    <input type="number" id="turndown" placeholder="0" min="0" required>
+                    <input type="number" id="turndown" placeholder="0" min="0">
                 </div>
             </div>
         </div>
@@ -265,7 +265,7 @@
 </div>
 
 <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgLfSUrVZGDTz6maG5IJ_IgTDx3r_ywp0KwBmD9UUge_PaoTxqHQz645N9k_CgvK_D/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0EOOMwRPMwuAAE3LHH8EbJkR9U-tin4_EMX10q8yRnTEK1o13dO329y6PEYNs8L7F/exec";
 
     function loadRulesToUI() {
         if (typeof MANNING_RULES !== "undefined") {
@@ -403,7 +403,6 @@
         let turnCredit = Number(document.getElementById("turnCredit")?.value) || 0;
 
         let creditRA = Number(document.getElementById("creditRA")?.value) || 14;
-        let maxCreditCap = (typeof MANNING_RULES !== "undefined" && MANNING_RULES.maxCreditPerRA) ? MANNING_RULES.maxCreditPerRA : 14.1;
         let spvGoal = Number(document.getElementById("spvGoal")?.value) || 17;
 
         let stayover = tonightOcc - departure;
@@ -436,14 +435,14 @@
         let spvNeeded = arrival > 0 ? Math.ceil(arrival / spvGoal) : 0;
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
-        generateRADistribution(raNeeded, total, maxCreditCap, {
+        generateRADistribution(raNeeded, total, creditRA, {
             stayover, departure, backlog, pickup, turndown
         }, {
             stayCredit, depCredit, backCredit, pickCredit, turnCredit
         });
     }
 
-    function generateRADistribution(raNeeded, totalCredit, maxCreditCap, qtyMap, weightMap) {
+    function generateRADistribution(raNeeded, totalCredit, creditRACapacity, qtyMap, weightMap) {
         const listContainer = document.getElementById("raAllocationList");
         if (!listContainer) return;
         listContainer.innerHTML = "";
@@ -453,29 +452,29 @@
             return;
         }
 
-        const maxStayoverPerRA = (typeof MANNING_RULES !== "undefined" && MANNING_RULES.maxStayoverPerRA) 
-                                 ? MANNING_RULES.maxStayoverPerRA 
-                                 : 13;
+        // Batas maksimal credit Stayover per RA adalah 75% dari total Capacity Credit/RA
+        const maxStayoverCreditPerRA = creditRACapacity * 0.75;
 
         let raAllocations = [];
         for (let i = 0; i < raNeeded; i++) {
-            raAllocations.push({ id: i + 1, credit: 0, tasks: {} });
+            raAllocations.push({ id: i + 1, credit: 0, stayCredit: 0, tasks: {} });
         }
 
         let remainingTasks = {
             stayover: qtyMap.stayover,
-            backlog: qtyMap.backlog,
             departure: qtyMap.departure,
+            backlog: qtyMap.backlog,
             pickup: qtyMap.pickup,
             turndown: qtyMap.turndown
         };
 
+        // Urutan prioritas penugasan secara ketat: Stayover -> Departure -> Dropped -> Pick-up -> Turn Down
         const taskPriorityList = [
-            { key: "stayover", name: "Stayover", weight: weightMap.stayCredit, maxQtyCap: maxStayoverPerRA },
-            { key: "backlog", name: "Dropped", weight: weightMap.backCredit, maxQtyCap: null },
-            { key: "departure", name: "Departure", weight: weightMap.depCredit, maxQtyCap: null },
-            { key: "pickup", name: "Pick-up", weight: weightMap.pickCredit, maxQtyCap: null },
-            { key: "turndown", name: "Turn Down", weight: weightMap.turnCredit, maxQtyCap: null }
+            { key: "stayover", name: "Stayover", weight: weightMap.stayCredit, isStayover: true },
+            { key: "departure", name: "Departure", weight: weightMap.depCredit, isStayover: false },
+            { key: "backlog", name: "Dropped", weight: weightMap.backCredit, isStayover: false },
+            { key: "pickup", name: "Pick-up", weight: weightMap.pickCredit, isStayover: false },
+            { key: "turndown", name: "Turn Down", weight: weightMap.turnCredit, isStayover: false }
         ];
 
         for (let i = 0; i < raNeeded; i++) {
@@ -485,24 +484,33 @@
                 let availableQty = remainingTasks[task.key];
                 if (availableQty <= 0 || task.weight <= 0) continue;
 
-                let remainingCapacity = maxCreditCap - ra.credit;
-                if (remainingCapacity < task.weight - 0.0001) continue;
+                // Hitung sisa kapasitas RA secara umum
+                let remainingGeneralCap = creditRACapacity - ra.credit;
+                if (remainingGeneralCap < task.weight - 0.0001) continue;
 
-                let maxRoomsByCredit = Math.floor((remainingCapacity + 0.0001) / task.weight);
-                let currentTaskAssigned = ra.tasks[task.name] || 0;
-                let maxRoomsAllowed = task.maxQtyCap !== null 
-                    ? Math.min(maxRoomsByCredit, task.maxQtyCap - currentTaskAssigned)
-                    : maxRoomsByCredit;
+                let maxRoomsAllowed = Math.floor((remainingGeneralCap + 0.0001) / task.weight);
+
+                // Khusus Stayover: terapkan pembatasan maksimal 0.75 x Capacity
+                if (task.isStayover) {
+                    let remainingStayCap = maxStayoverCreditPerRA - ra.stayCredit;
+                    if (remainingStayCap < task.weight - 0.0001) continue;
+                    let maxStayRoomsAllowed = Math.floor((remainingStayCap + 0.0001) / task.weight);
+                    maxRoomsAllowed = Math.min(maxRoomsAllowed, maxStayRoomsAllowed);
+                }
 
                 let roomsToAssign = Math.min(availableQty, maxRoomsAllowed);
 
                 if (roomsToAssign > 0) {
                     remainingTasks[task.key] -= roomsToAssign;
-                    ra.credit += (roomsToAssign * task.weight);
+                    let taskTotalCredit = roomsToAssign * task.weight;
+                    
+                    ra.credit += taskTotalCredit;
+                    if (task.isStayover) ra.stayCredit += taskTotalCredit;
+
                     ra.tasks[task.name] = (ra.tasks[task.name] || 0) + roomsToAssign;
                 }
 
-                if (ra.credit >= 14.0) break;
+                if (ra.credit >= creditRACapacity) break;
             }
         }
 
@@ -518,15 +526,15 @@
             let taskText = taskTextArr.length > 0 ? taskTextArr.join(" + ") : "Persiapan & Bantuan Umum";
             
             let specialBadge = "";
-            if (ra.credit < 13.0) {
-                let deficit = (14.0 - ra.credit).toFixed(1);
+            if (ra.credit < (creditRACapacity - 1.0)) {
+                let deficit = (creditRACapacity - ra.credit).toFixed(1);
                 specialBadge = `<div class="special-project-badge"><i class="fa-solid fa-screwdriver-wrench"></i> Credit ${ra.credit.toFixed(1)} (Less ${deficit}) Alokasi Special Project / Deep Cleaning</div>`;
             }
 
             raItem.innerHTML = `
                 <div class="ra-header">
                     <span class="ra-name"><i class="fa-solid fa-user-check" style="color:#0284c7;"></i> RA ${ra.id}</span>
-                    <span class="ra-credit-badge">${ra.credit.toFixed(1)} Credit</span>
+                    <span class="ra-credit-badge">${ra.credit.toFixed(1)} / ${creditRACapacity} Credit</span>
                 </div>
                 <div class="ra-details">
                     <b>Role/Tugas:</b> ${taskText}
@@ -548,7 +556,8 @@
     }
 
     function validateInputs() {
-        const requiredIds = ["planBy", "tonightOcc", "arrival", "departure", "backlog", "pickup", "turndown"];
+        // Hanya Planner Name, Room Sold, Arrival, dan Departure yang wajib diisi
+        const requiredIds = ["planBy", "tonightOcc", "arrival", "departure"];
         for (let id of requiredIds) {
             const el = document.getElementById(id);
             if (!el || el.value.trim() === "") {
@@ -564,7 +573,7 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Input Belum Lengkap',
-                text: 'Harap isi semua kolom input terlebih dahulu, tidak boleh ada yang kosong.',
+                text: 'Harap isi Planner Name, Room Sold, Arrival, dan Departure terlebih dahulu.',
                 confirmButtonColor: '#0284c7'
             });
             return;
