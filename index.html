@@ -602,95 +602,111 @@
         calculate();
     }
 
-    function submitToGoogleSheet() {
-        const tonightOcc = Number(document.getElementById("tonightOcc")?.value) || 0;
+   function submitToGoogleSheet() {
+    // 1. Pastikan SweetAlert2 dimuat
+    if (typeof Swal === "undefined") {
+        alert("Library SweetAlert2 belum dimuat di HTML!");
+        return;
+    }
 
-        if (tonightOcc <= 0 || tonightOcc > 272) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Input Tidak Valid',
-                text: 'Room Sold harus bernilai di atas 0 dan tidak boleh melebihi 272.',
-                confirmButtonColor: '#0284c7'
-            });
-            return;
-        }
+    const tonightOccInput = document.getElementById("tonightOcc");
+    const tonightOcc = Number(tonightOccInput?.value) || 0;
 
-        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("GANTI_DENGAN")) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'URL Apps Script Belum Diisi',
-                text: 'Harap periksa kembali variabel GOOGLE_SCRIPT_URL.'
-            });
-            return;
-        }
+    // Validasi Input Room Sold
+    if (tonightOcc <= 0 || tonightOcc > 272) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Input Tidak Valid',
+            text: 'Room Sold harus bernilai di atas 0 dan tidak boleh melebihi 272.',
+            confirmButtonColor: '#0284c7'
+        });
+        return;
+    }
 
-        const plannerInput = document.getElementById("planBy")?.value.trim() || "-";
-        const btn = document.getElementById("submitBtn");
+    // Validasi URL Apps Script
+    if (typeof GOOGLE_SCRIPT_URL === "undefined" || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("GANTI_DENGAN")) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'URL Apps Script Belum Diisi',
+            text: 'Harap periksa kembali variabel GOOGLE_SCRIPT_URL.'
+        });
+        return;
+    }
+
+    const plannerInput = document.getElementById("planBy")?.value?.trim() || "-";
+    const btn = document.getElementById("submitBtn");
+
+    // Efek Loading pada Tombol (Aman dari null error)
+    if (btn) {
         btn.disabled = true;
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> SUBMITTING...`;
+    }
 
-        const getValue = (id) => document.getElementById(id)?.value || "0";
-        const getText = (id) => document.getElementById(id)?.innerText || "0";
+    // Helper function aman
+    const getValue = (id) => document.getElementById(id)?.value || "0";
+    const getText = (id) => document.getElementById(id)?.innerText || "0";
 
+    const payload = {
+        tonightOcc: getValue("tonightOcc"),
+        arrival: getValue("arrival"),
+        departure: getValue("departure"),
+        backlog: getValue("backlog"),
+        pickup: getValue("pickup"),
+        turndown: getValue("turndown"),
+        stayQty: getValue("stayQty"),
+        totalCleaning: getText("totalCleaning"),
+        creditRA: getValue("creditRA"),
+        requiredRA: getText("requiredRA"),
+        requiredSpv: getText("requiredSpv"),
+        planBy: plannerInput
+    };
 
-const payload = {
-    tonightOcc: getValue("tonightOcc"),
-    arrival: getValue("arrival"),
-    departure: getValue("departure"),
-    backlog: getValue("backlog"),
-    pickup: getValue("pickup"),
-    turndown: getValue("turndown"),
-    stayQty: getValue("stayQty"),
-    totalCleaning: getText("totalCleaning"),
-    creditRA: getValue("creditRA"),
-    requiredRA: getText("requiredRA"),
-    requiredSpv: getText("requiredSpv"),
-    planBy: plannerInput// Merekam nama planner
-};
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    })
+    .then(() => {
+        const now = new Date();
+        const timeString = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + 
+                           now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        
+        const lastSubmitTimeEl = document.getElementById("lastSubmitTime");
+        const lastSubmitPlannerEl = document.getElementById("lastSubmitPlanner");
 
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-        })
-        .then(() => {
-            const now = new Date();
-            const timeString = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + 
-                               now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            
-            document.getElementById("lastSubmitTime").innerText = timeString;
-            document.getElementById("lastSubmitPlanner").innerText = plannerInput;
+        if (lastSubmitTimeEl) lastSubmitTimeEl.innerText = timeString;
+        if (lastSubmitPlannerEl) lastSubmitPlannerEl.innerText = plannerInput;
 
-            localStorage.setItem("lastSubmitTime", timeString);
-            localStorage.setItem("lastSubmitPlanner", plannerInput);
+        localStorage.setItem("lastSubmitTime", timeString);
+        localStorage.setItem("lastSubmitPlanner", plannerInput);
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data berhasil dikirim ke Google Sheet!',
-                confirmButtonColor: '#0284c7'
-            });
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data berhasil dikirim ke Google Sheet!',
+            confirmButtonColor: '#0284c7'
+        });
 
-            resetForm();
+        // Jalankan fungsi reset & fetch jika ada
+        if (typeof resetForm === "function") resetForm();
+        if (typeof fetchLastSubmittedFromSheet === "function") {
             setTimeout(fetchLastSubmittedFromSheet, 2000);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: 'Gagal mengirim data. Silakan coba lagi.',
-                confirmButtonColor: '#ef4444'
-            });
-        })
-        .finally(() => {
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal mengirim data. Silakan coba lagi.',
+            confirmButtonColor: '#ef4444'
+        });
+    })
+    .finally(() => {
+        if (btn) {
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SUBMIT TO GOOGLE SHEET`;
-        });
-    }
-   
-</script>
-
-</body>
-</html>
+        }
+    });
+}
