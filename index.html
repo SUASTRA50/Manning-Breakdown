@@ -76,19 +76,20 @@
 <div class="pos-container">
     <header class="pos-header">
     <div class="brand">
-       
+        <!-- 1. Roda Gigi dipindah ke paling kiri -->
+        <button id="settingBtn" onclick="openSettingModal()" title="Rules Setting" style="background: #f8fafc; border: 1px solid #e2e8f0; width: 36px; height: 36px; border-radius: 50%; font-size: 14px; color: #475569; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+
         <div>
-            <h1>MANNING CALCULATOR</h1>
+            <h1 style="font-size: 14px;">MANNING CALCULATOR</h1>
             <p>Daily Staffing Planner</p>
         </div>
     </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-        <button id="settingBtn" onclick="openSettingModal()" title="Rules Setting" style="background: #f8fafc; border: 1px solid #e2e8f0; width: 36px; height: 36px; border-radius: 50%; font-size: 14px; color: #475569; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
-    <i class="fa-solid fa-gear"></i>
-</button>
-        <div class="pos-badge">
-            <i class="fa-solid fa-hotel"></i> Capacity: <b>272 Rooms</b>
-        </div>
+
+    <!-- 2. Capacity tanpa kotak background & border -->
+    <div style="font-size: 13px; color: #475569; text-align: right; white-space: nowrap;">
+        <i class="fa-solid fa-hotel" style="color: #0284c7; margin-right: 4px;"></i> Capacity: <b>272 Rooms</b>
     </div>
 </header>
 
