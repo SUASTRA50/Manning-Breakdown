@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -121,7 +121,7 @@
 <div class="pos-container">
     <header class="pos-header">
         <div class="brand">
-            <button class="btn-settings" onclick="openSettingsModal()" title="Buka Pengaturan Weight & Staff RA">
+            <button class="btn-settings" onclick="openSettingsModal()" title="Open Weight & Staff Settings">
                 <i class="fa-solid fa-gear"></i>
             </button>
             <div>
@@ -159,7 +159,7 @@
 
                 <div class="input-group">
                     <label for="planBy">Planner Name</label>
-                    <input type="text" id="planBy" placeholder="Isi Nama..." required>
+                    <input type="text" id="planBy" placeholder="Enter Name..." required>
                 </div>
             </div>
 
@@ -259,15 +259,14 @@
                     <input id="creditRA" type="number" class="credit-box" value="14">
                 </div>
 
-                <!-- DUA INPUT BARU -->
                 <div class="summary">
                     <label for="creditDW">Credit DW</label>
-                    <input id="creditDW" type="number" class="credit-box" value="11">
+                    <input id="creditDW" type="number" class="credit-box" value="12">
                 </div>
 
                 <div class="summary">
                     <label for="creditTrainee">Credit Trainee</label>
-                    <input id="creditTrainee" type="number" class="credit-box" value="5">
+                    <input id="creditTrainee" type="number" class="credit-box" value="10">
                 </div>
 
                 <div class="summary">
@@ -306,9 +305,9 @@
                     <thead>
                         <tr>
                             <th style="width: 8%;">No</th>
-                            <th style="width: 25%;">Nama Staff</th>
+                            <th style="width: 25%;">Staff Name</th>
                             <th style="width: 17%;">Total Credit</th>
-                            <th style="width: 50%;">Alokasi Tugas</th>
+                            <th style="width: 50%;">Task Allocation</th>
                         </tr>
                     </thead>
                     <tbody id="raPrintTableBody"></tbody>
@@ -331,7 +330,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0EOOMwRPMwuAAE3LHH8EbJkR9U-tin4_EMX10q8yRnTEK1o13dO329y6PEYNs8L7F/exec";
 
     let raCustomNames = {};
-    let maxStayoverPercent = 75;
+    let maxStayoverPercent = 45;
 
     function loadRulesToUI() {
         if (typeof MANNING_RULES !== "undefined") {
@@ -357,7 +356,7 @@
 
         const savedStayoverCap = localStorage.getItem("maxStayoverPercent");
         if (savedStayoverCap) {
-            maxStayoverPercent = Number(savedStayoverCap) || 75;
+            maxStayoverPercent = Number(savedStayoverCap) || 45;
         }
     }
 
@@ -371,23 +370,22 @@
             raInputsHTML += `
                 <div style="display:flex; align-items:center; gap:4px;">
                     <span style="font-size:11px; font-weight:bold; width:35px; color:#475569;">RA${i}:</span>
-                    <input id="sw_ra_name_${i}" type="text" class="swal2-input swal-ra-input" value="${existingName}" placeholder="Nama Staff ${i}">
+                    <input id="sw_ra_name_${i}" type="text" class="swal2-input swal-ra-input" value="${existingName}" placeholder="Staff Name ${i}">
                 </div>
             `;
         }
 
         Swal.fire({
-            title: 'Pengaturan Manning Rules & Staff',
             width: '560px',
             html: `
                 <div style="display:flex; flex-direction:column; gap:12px; text-align:left; font-size:13px; max-height:70vh; overflow-y:auto; padding-right:4px;">
-                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> PENGATURAN NAMA STAFF (RA)</h4>
-                    <p style="font-size:11px; color:#64748b;">Isi nama staff untuk menggantikan label RA1, RA2, dst. pada tampilan alokasi:</p>
+                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
+                    <p style="font-size:11px; color:#64748b;">Enter staff names to replace labels RA1, RA2, etc. on allocation display:</p>
                     <div class="swal-ra-grid">
                         ${raInputsHTML}
                     </div>
 
-                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:8px;"><i class="fa-solid fa-sliders"></i> BOBOT WEIGHT & TARGET</h4>
+                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:8px;"><i class="fa-solid fa-sliders"></i> WEIGHT & TARGET SETTINGS</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                         <div>
                             <label><b>Stayover Weight:</b></label>
@@ -423,11 +421,11 @@
                         </div>
                     </div>
 
-                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:8px;"><i class="fa-solid fa-chart-pie"></i> ATURAN ALOKASI STAYOVER</h4>
+                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:8px;"><i class="fa-solid fa-chart-pie"></i> STAYOVER ALLOCATION RULES</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                         <div>
                             <label><b>Max Stayover / RA (%):</b></label>
-                            <input id="sw_maxStayPercent" type="number" class="swal2-input swal-ra-input" value="${maxStayoverPercent}" min="1" max="100" placeholder="75">
+                            <input id="sw_maxStayPercent" type="number" class="swal2-input swal-ra-input" value="${maxStayoverPercent}" min="1" max="100" placeholder="45">
                         </div>
                         <div>
                             <label><b>Supervisor Goal:</b></label>
@@ -437,8 +435,8 @@
                 </div>
             `,
             showCancelButton: true,
-            confirmButtonText: 'Simpan',
-            cancelButtonText: 'Batal',
+            confirmButtonText: 'Save',
+            cancelButtonText: 'Cancel',
             confirmButtonColor: '#0284c7',
             preConfirm: () => {
                 let tempNames = {};
@@ -466,7 +464,7 @@
                 raCustomNames = result.value.names;
                 localStorage.setItem("raCustomNames", JSON.stringify(raCustomNames));
 
-                maxStayoverPercent = Number(result.value.maxStayPercent) || 75;
+                maxStayoverPercent = Number(result.value.maxStayPercent) || 45;
                 localStorage.setItem("maxStayoverPercent", maxStayoverPercent);
 
                 document.getElementById('stayCredit').value = result.value.stay;
@@ -480,7 +478,7 @@
                 document.getElementById('spvGoal').value = result.value.spv;
                 
                 calculate();
-                Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Pengaturan berhasil diperbarui.', timer: 1500, showConfirmButton: false });
+                Swal.fire({ icon: 'success', title: 'Saved!', text: 'Settings updated successfully.', timer: 1500, showConfirmButton: false });
             }
         });
     }
@@ -532,8 +530,8 @@
         if (rawOcc !== "" && (tonightOcc < 1 || tonightOcc > 272)) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Nilai Tidak Valid',
-                text: 'Jumlah Room Sold harus berada dalam rentang 1 - 272 rooms.',
+                title: 'Invalid Input',
+                text: 'Room Sold must be between 1 and 272 rooms.',
                 confirmButtonColor: '#0284c7'
             });
             tonightOccInput.value = "";
@@ -553,6 +551,8 @@
         let turnCredit = Number(document.getElementById("turnCredit")?.value) || 0;
 
         let creditRA = Number(document.getElementById("creditRA")?.value) || 14;
+        let creditDW = Number(document.getElementById("creditDW")?.value) || 12;
+        let creditTrainee = Number(document.getElementById("creditTrainee")?.value) || 10;
         let spvGoal = Number(document.getElementById("spvGoal")?.value) || 17;
 
         let stayover = tonightOcc - departure;
@@ -585,14 +585,14 @@
         let spvNeeded = arrival > 0 ? Math.ceil(arrival / spvGoal) : 0;
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
-        generateRADistribution(raNeeded, total, creditRA, {
+        generateRADistribution(raNeeded, total, { creditRA, creditDW, creditTrainee }, {
             stayover, departure, backlog, pickup, turndown
         }, {
             stayCredit, depCredit, backCredit, pickCredit, turnCredit
         });
     }
 
-    function generateRADistribution(raNeeded, totalCredit, creditRACapacity, qtyMap, weightMap) {
+    function generateRADistribution(raNeeded, totalCredit, capacityMap, qtyMap, weightMap) {
         const listContainer = document.getElementById("raAllocationList");
         const printTableBody = document.getElementById("raPrintTableBody");
 
@@ -601,17 +601,40 @@
         printTableBody.innerHTML = "";
 
         if (raNeeded <= 0 || totalCredit <= 0) {
-            listContainer.innerHTML = `<div style="text-align:center; font-size:12px; color:#94a3b8; padding:10px;">Belum ada alokasi tugas.</div>`;
-            printTableBody.innerHTML = `<tr><td colspan="4" class="center">Belum ada alokasi tugas.</td></tr>`;
+            listContainer.innerHTML = `<div style="text-align:center; font-size:12px; color:#94a3b8; padding:10px;">No task allocation yet.</div>`;
+            printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
             return;
         }
 
         const stayoverCapFactor = maxStayoverPercent / 100;
-        const maxStayoverCreditPerRA = creditRACapacity * stayoverCapFactor;
 
         let raAllocations = [];
         for (let i = 0; i < raNeeded; i++) {
-            raAllocations.push({ id: i + 1, credit: 0, stayCredit: 0, tasks: {} });
+            let id = i + 1;
+            let name = raCustomNames[id] ? raCustomNames[id] : `RA ${id}`;
+            let nameUpper = name.toUpperCase();
+
+            let targetCap = capacityMap.creditRA;
+            let allowStayover = true;
+
+            // ATURAN BARU: DW DAN TRAINEE
+            if (nameUpper.includes("DW")) {
+                targetCap = capacityMap.creditDW;
+                allowStayover = false;
+            } else if (nameUpper.includes("TRAINEE")) {
+                targetCap = capacityMap.creditTrainee;
+                allowStayover = false;
+            }
+
+            raAllocations.push({ 
+                id, 
+                name, 
+                targetCap, 
+                allowStayover, 
+                credit: 0, 
+                stayCredit: 0, 
+                tasks: {} 
+            });
         }
 
         let remainingTasks = {
@@ -634,16 +657,20 @@
             let ra = raAllocations[i];
 
             for (let task of taskPriorityList) {
+                // SKIP STAYOVER UNTUK DW & TRAINEE
+                if (task.isStayover && !ra.allowStayover) continue;
+
                 let availableQty = remainingTasks[task.key];
                 if (availableQty <= 0 || task.weight <= 0) continue;
 
-                let remainingGeneralCap = creditRACapacity - ra.credit;
+                let remainingGeneralCap = ra.targetCap - ra.credit;
                 if (remainingGeneralCap < task.weight - 0.0001) continue;
 
                 let maxRoomsAllowed = Math.floor((remainingGeneralCap + 0.0001) / task.weight);
 
                 if (task.isStayover) {
-                    let remainingStayCap = maxStayoverCreditPerRA - ra.stayCredit;
+                    let maxStayCredit = ra.targetCap * stayoverCapFactor;
+                    let remainingStayCap = maxStayCredit - ra.stayCredit;
                     if (remainingStayCap < task.weight - 0.0001) continue;
                     let maxStayRoomsAllowed = Math.floor((remainingStayCap + 0.0001) / task.weight);
                     maxRoomsAllowed = Math.min(maxRoomsAllowed, maxStayRoomsAllowed);
@@ -661,25 +688,23 @@
                     ra.tasks[task.name] = (ra.tasks[task.name] || 0) + roomsToAssign;
                 }
 
-                if (ra.credit >= creditRACapacity) break;
+                if (ra.credit >= ra.targetCap) break;
             }
         }
 
         raAllocations.forEach((ra) => {
-            let displayName = raCustomNames[ra.id] ? raCustomNames[ra.id] : `RA ${ra.id}`;
-
             let taskTextArr = [];
             for (let [tName, tQty] of Object.entries(ra.tasks)) {
                 if (tQty > 0) taskTextArr.push(`${tQty} ${tName}`);
             }
 
-            let taskText = taskTextArr.length > 0 ? taskTextArr.join(" + ") : "Persiapan & Bantuan Umum";
+            let taskText = taskTextArr.length > 0 ? taskTextArr.join(" + ") : "General Assistance / Prep";
             
             let specialBadge = "";
             let specialPrintText = "";
-            if (ra.credit < (creditRACapacity - 1.0)) {
-                let deficit = (creditRACapacity - ra.credit).toFixed(1);
-                specialBadge = `<div class="special-project-badge"><i class="fa-solid fa-screwdriver-wrench"></i> Credit ${ra.credit.toFixed(1)} (Less ${deficit}) Alokasi Special Project / Deep Cleaning</div>`;
+            if (ra.credit < (ra.targetCap - 1.0)) {
+                let deficit = (ra.targetCap - ra.credit).toFixed(1);
+                specialBadge = `<div class="special-project-badge"><i class="fa-solid fa-screwdriver-wrench"></i> Credit ${ra.credit.toFixed(1)} (Less ${deficit}) Special Project / Deep Cleaning</div>`;
                 specialPrintText = ` | (Less ${deficit} - Special Project / Deep Cleaning)`;
             }
 
@@ -687,11 +712,11 @@
             raItem.className = "ra-item";
             raItem.innerHTML = `
                 <div class="ra-header">
-                    <span class="ra-name"><i class="fa-solid fa-user-check" style="color:#0284c7;"></i> ${displayName}</span>
-                    <span class="ra-credit-badge">${ra.credit.toFixed(1)} / ${creditRACapacity} Credit</span>
+                    <span class="ra-name"><i class="fa-solid fa-user-check" style="color:#0284c7;"></i> ${ra.name}</span>
+                    <span class="ra-credit-badge">${ra.credit.toFixed(1)} / ${ra.targetCap} Credit</span>
                 </div>
                 <div class="ra-details">
-                    <b>Role/Tugas:</b> ${taskText}
+                    <b>Role/Tasks:</b> ${taskText}
                     ${specialBadge}
                 </div>
             `;
@@ -700,8 +725,8 @@
             let tr = document.createElement("tr");
             tr.innerHTML = `
                 <td class="center">${ra.id}</td>
-                <td class="bold">${displayName}</td>
-                <td class="center">${ra.credit.toFixed(1)} / ${creditRACapacity}</td>
+                <td class="bold">${ra.name}</td>
+                <td class="center">${ra.credit.toFixed(1)} / ${ra.targetCap}</td>
                 <td>${taskText}${specialPrintText}</td>
             `;
             printTableBody.appendChild(tr);
@@ -710,7 +735,7 @@
 
     function printDistribution() {
         const now = new Date();
-        const formattedDate = now.toLocaleDateString('id-ID', { 
+        const formattedDate = now.toLocaleDateString('en-US', { 
             weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
         });
         document.getElementById("printDate").innerText = formattedDate;
@@ -742,8 +767,8 @@
         if (!checkValidation.valid) {
             Swal.fire({
                 icon: 'error',
-                title: 'Input Belum Lengkap',
-                text: 'Harap isi Planner Name, Room Sold, Arrival, dan Departure terlebih dahulu.',
+                title: 'Incomplete Input',
+                text: 'Please fill in Planner Name, Room Sold, Arrival, and Departure fields first.',
                 confirmButtonColor: '#0284c7'
             });
             return;
@@ -753,8 +778,8 @@
         if (tonightOcc < 1 || tonightOcc > 272) {
             Swal.fire({
                 icon: 'error',
-                title: 'Input Tidak Valid',
-                text: 'Room Sold harus bernilai antara 1 sampai 272.',
+                title: 'Invalid Input',
+                text: 'Room Sold must be between 1 and 272.',
                 confirmButtonColor: '#0284c7'
             });
             return;
@@ -763,8 +788,8 @@
         if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("GANTI_DENGAN")) {
             Swal.fire({
                 icon: 'warning',
-                title: 'URL Apps Script Belum Diisi',
-                text: 'Harap periksa kembali variabel GOOGLE_SCRIPT_URL.'
+                title: 'Apps Script URL Missing',
+                text: 'Please check your GOOGLE_SCRIPT_URL variable.'
             });
             return;
         }
@@ -802,8 +827,8 @@
         })
         .then(() => {
             const now = new Date();
-            const timeString = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + 
-                               now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            const timeString = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + 
+                               now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             
             document.getElementById("lastSubmitTime").innerText = timeString;
             document.getElementById("lastSubmitPlanner").innerText = plannerInput;
@@ -813,8 +838,8 @@
 
             Swal.fire({
                 icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data berhasil dikirim ke Google Sheet!',
+                title: 'Success!',
+                text: 'Data successfully submitted to Google Sheets!',
                 confirmButtonColor: '#0284c7'
             });
 
@@ -825,8 +850,8 @@
             console.error("Error:", error);
             Swal.fire({
                 icon: 'error',
-                title: 'Gagal!',
-                text: 'Gagal mengirim data. Silakan coba lagi.',
+                title: 'Failed!',
+                text: 'Failed to submit data. Please try again.',
                 confirmButtonColor: '#ef4444'
             });
         })
