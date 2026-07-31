@@ -617,13 +617,17 @@
 
             let targetCap = capacityMap.creditRA;
             let allowStayover = true;
+            let allowTurndown = true;
 
+            // DW & TRAINEE: Tidak diperbolehkan Stayover dan Turn Down
             if (nameUpper.includes("DW")) {
                 targetCap = capacityMap.creditDW;
                 allowStayover = false;
+                allowTurndown = false;
             } else if (nameUpper.includes("TRAINEE")) {
                 targetCap = capacityMap.creditTrainee;
                 allowStayover = false;
+                allowTurndown = false;
             }
 
             raAllocations.push({ 
@@ -631,6 +635,7 @@
                 name, 
                 targetCap, 
                 allowStayover, 
+                allowTurndown,
                 credit: 0, 
                 stayCredit: 0, 
                 tasks: {} 
@@ -646,18 +651,20 @@
         };
 
         const taskPriorityList = [
-            { key: "stayover", name: "Stayover", weight: weightMap.stayCredit, isStayover: true },
-            { key: "departure", name: "Departure", weight: weightMap.depCredit, isStayover: false },
-            { key: "backlog", name: "Dropped", weight: weightMap.backCredit, isStayover: false },
-            { key: "pickup", name: "Pick-up", weight: weightMap.pickCredit, isStayover: false },
-            { key: "turndown", name: "Turn Down", weight: weightMap.turnCredit, isStayover: false }
+            { key: "stayover", name: "Stayover", weight: weightMap.stayCredit, isStayover: true, isTurndown: false },
+            { key: "departure", name: "Departure", weight: weightMap.depCredit, isStayover: false, isTurndown: false },
+            { key: "backlog", name: "Dropped", weight: weightMap.backCredit, isStayover: false, isTurndown: false },
+            { key: "pickup", name: "Pick-up", weight: weightMap.pickCredit, isStayover: false, isTurndown: false },
+            { key: "turndown", name: "Turn Down", weight: weightMap.turnCredit, isStayover: false, isTurndown: true }
         ];
 
         for (let i = 0; i < raNeeded; i++) {
             let ra = raAllocations[i];
 
             for (let task of taskPriorityList) {
+                // Filter akses tugas berdasarkan Role
                 if (task.isStayover && !ra.allowStayover) continue;
+                if (task.isTurndown && !ra.allowTurndown) continue;
 
                 let availableQty = remainingTasks[task.key];
                 if (availableQty <= 0 || task.weight <= 0) continue;
