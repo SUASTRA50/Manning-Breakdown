@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MANNING-BREAKDOWN</title>
+    <title>MANNING BREAKDOWN</title>
     <!-- FontAwesome Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 CSS & JS -->
@@ -132,7 +132,7 @@
         </div>
         <div class="capacity-display">
             Capacity
-            <b>272 Rooms</b>
+            <b id="headerCapacity">272 Rooms</b>
         </div>
     </header>
 
@@ -167,7 +167,7 @@
             <div class="pos-card">
                 <h3><i class="fa-solid fa-chart-line"></i> Hotel Forecast</h3>
                 <div class="input-group">
-                    <label for="tonightOcc">Room Sold (1-272)</label>
+                    <label for="tonightOcc">Room Sold</label>
                     <input type="number" id="tonightOcc" placeholder="1-272" min="1" max="272" required>
                 </div>
                 <div class="input-group">
@@ -332,6 +332,16 @@
 
     let raCustomNames = {};
     let maxStayoverPercent = 45;
+    let totalHotelCapacity = 272;
+
+    function updateCapacityUI() {
+        document.getElementById("headerCapacity").innerText = `${totalHotelCapacity} Rooms`;
+        const occInput = document.getElementById("tonightOcc");
+        if (occInput) {
+            occInput.placeholder = `1-${totalHotelCapacity}`;
+            occInput.max = totalHotelCapacity;
+        }
+    }
 
     function loadRulesToUI() {
         if (typeof MANNING_RULES !== "undefined") {
@@ -356,9 +366,16 @@
         }
 
         const savedStayoverCap = localStorage.getItem("maxStayoverPercent");
-        if (savedStayoverCap) {
-            maxStayoverPercent = Number(savedStayoverCap) || 45;
+        if (savedStayoverCap !== null) {
+            maxStayoverPercent = Number(savedStayoverCap);
         }
+
+        const savedCapacity = localStorage.getItem("totalHotelCapacity");
+        if (savedCapacity !== null) {
+            totalHotelCapacity = Number(savedCapacity);
+        }
+
+        updateCapacityUI();
     }
 
     function openSettingsModal() {
@@ -380,7 +397,14 @@
             width: '560px',
             html: `
                 <div style="display:flex; flex-direction:column; gap:12px; text-align:left; font-size:13px; max-height:70vh; overflow-y:auto; padding-right:4px;">
-                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
+                    
+                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-hotel"></i> GENERAL SETTINGS</h4>
+                    <div>
+                        <label><b>Total Hotel Capacity (Rooms):</b></label>
+                        <input id="sw_hotelCapacity" type="number" class="swal2-input swal-ra-input" value="${totalHotelCapacity}" min="0" placeholder="0">
+                    </div>
+
+                    <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:8px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
                     <p style="font-size:11px; color:#64748b;">Enter staff names to replace labels RA1, RA2, etc. on allocation display:</p>
                     <div class="swal-ra-grid">
                         ${raInputsHTML}
@@ -426,7 +450,7 @@
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                         <div>
                             <label><b>Max Stayover / RA (%):</b></label>
-                            <input id="sw_maxStayPercent" type="number" class="swal2-input swal-ra-input" value="${maxStayoverPercent}" min="1" max="100" placeholder="45">
+                            <input id="sw_maxStayPercent" type="number" class="swal2-input swal-ra-input" value="${maxStayoverPercent}" min="0" max="100" placeholder="0">
                         </div>
                         <div>
                             <label><b>Supervisor Goal:</b></label>
@@ -436,9 +460,12 @@
                 </div>
             `,
             showCancelButton: true,
+            showDenyButton: true,
             confirmButtonText: 'Save',
             cancelButtonText: 'Cancel',
+            denyButtonText: 'Reset',
             confirmButtonColor: '#0284c7',
+            denyButtonColor: '#ef4444',
             preConfirm: () => {
                 let tempNames = {};
                 for (let i = 1; i <= raNeeded; i++) {
@@ -447,6 +474,7 @@
                 }
 
                 return {
+                    hotelCapacity: document.getElementById('sw_hotelCapacity').value,
                     names: tempNames,
                     stay: document.getElementById('sw_stay').value,
                     dep: document.getElementById('sw_dep').value,
@@ -462,10 +490,14 @@
             }
         }).then((result) => {
             if (result.isConfirmed && result.value) {
+                totalHotelCapacity = Number(result.value.hotelCapacity) || 0;
+                localStorage.setItem("totalHotelCapacity", totalHotelCapacity);
+                updateCapacityUI();
+
                 raCustomNames = result.value.names;
                 localStorage.setItem("raCustomNames", JSON.stringify(raCustomNames));
 
-                maxStayoverPercent = Number(result.value.maxStayPercent) || 45;
+                maxStayoverPercent = Number(result.value.maxStayPercent) || 0;
                 localStorage.setItem("maxStayoverPercent", maxStayoverPercent);
 
                 document.getElementById('stayCredit').value = result.value.stay;
@@ -480,6 +512,30 @@
                 
                 calculate();
                 Swal.fire({ icon: 'success', title: 'Saved!', text: 'Settings updated successfully.', timer: 1500, showConfirmButton: false });
+            } else if (result.isDenied) {
+                // LOGIKA RESET KESELEURUHAN SETTING KE 0
+                totalHotelCapacity = 0;
+                maxStayoverPercent = 0;
+                raCustomNames = {};
+
+                localStorage.setItem("totalHotelCapacity", 0);
+                localStorage.setItem("maxStayoverPercent", 0);
+                localStorage.removeItem("raCustomNames");
+
+                updateCapacityUI();
+
+                document.getElementById('stayCredit').value = 0;
+                document.getElementById('depCredit').value = 0;
+                document.getElementById('backCredit').value = 0;
+                document.getElementById('pickCredit').value = 0;
+                document.getElementById('turnCredit').value = 0;
+                document.getElementById('creditRA').value = 0;
+                document.getElementById('creditDW').value = 0;
+                document.getElementById('creditTrainee').value = 0;
+                document.getElementById('spvGoal').value = 0;
+
+                calculate();
+                Swal.fire({ icon: 'info', title: 'Reset Complete', text: 'All settings have been reset to 0.', timer: 1500, showConfirmButton: false });
             }
         });
     }
@@ -528,11 +584,11 @@
         let rawOcc = tonightOccInput?.value;
         let tonightOcc = Number(rawOcc) || 0;
 
-        if (rawOcc !== "" && (tonightOcc < 1 || tonightOcc > 272)) {
+        if (rawOcc !== "" && totalHotelCapacity > 0 && (tonightOcc < 1 || tonightOcc > totalHotelCapacity)) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Invalid Input',
-                text: 'Room Sold must be between 1 and 272 rooms.',
+                text: `Room Sold must be between 1 and ${totalHotelCapacity} rooms.`,
                 confirmButtonColor: '#0284c7'
             });
             tonightOccInput.value = "";
@@ -580,10 +636,10 @@
         let total = stayTotal + depTotal + backTotal + pickTotal + turnTotal;
         document.getElementById("totalCleaning").innerText = total.toFixed(1);
 
-        let raNeeded = Math.ceil(total / creditRA);
+        let raNeeded = creditRA > 0 ? Math.ceil(total / creditRA) : 0;
         document.getElementById("requiredRA").innerText = raNeeded;
 
-        let spvNeeded = arrival > 0 ? Math.ceil(arrival / spvGoal) : 0;
+        let spvNeeded = (arrival > 0 && spvGoal > 0) ? Math.ceil(arrival / spvGoal) : 0;
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
         generateRADistribution(raNeeded, total, { creditRA, creditDW, creditTrainee }, {
@@ -662,7 +718,6 @@
             let ra = raAllocations[i];
 
             for (let task of taskPriorityList) {
-                // Filter akses tugas berdasarkan Role
                 if (task.isStayover && !ra.allowStayover) continue;
                 if (task.isTurndown && !ra.allowTurndown) continue;
 
@@ -781,11 +836,11 @@
         }
 
         const tonightOcc = Number(document.getElementById("tonightOcc")?.value) || 0;
-        if (tonightOcc < 1 || tonightOcc > 272) {
+        if (totalHotelCapacity > 0 && (tonightOcc < 1 || tonightOcc > totalHotelCapacity)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Invalid Input',
-                text: 'Room Sold must be between 1 and 272.',
+                text: `Room Sold must be between 1 and ${totalHotelCapacity}.`,
                 confirmButtonColor: '#0284c7'
             });
             return;
