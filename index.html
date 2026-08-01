@@ -138,7 +138,6 @@
             .print-only-header h2 { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #000; letter-spacing: 0.5px; margin-bottom: 4px; }
             .print-only-header p { font-size: 12px; color: #444; margin: 0; }
 
-            /* CETAK RINGKASAN FORECAST & SERVICE DI ATAS TABEL */
             .print-summary-info { display: block !important; margin-bottom: 14px; border: 1px solid #000; padding: 8px 12px; font-size: 11px; }
             .print-summary-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; text-align: center; }
             .print-summary-item span { display: block; font-size: 9px; font-weight: bold; text-transform: uppercase; color: #333; }
@@ -151,7 +150,6 @@
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
 
-            /* CETAK DAILY INFORMATION DI BAWAH TABEL */
             .print-daily-info { display: block !important; margin-top: 16px; border: 1px solid #000; padding: 10px; font-size: 11px; }
             .print-daily-info h4 { font-size: 11px; font-weight: 800; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase; }
             .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
@@ -335,7 +333,6 @@
             <div class="pos-card">
                 <h3><i class="fa-solid fa-clipboard-user"></i> Room Attendant Distribution</h3>
                 
-                <!-- INFORMASI DENGAN TAMPILAN PRINT KHUSUS DI ATAS TABEL -->
                 <div class="print-summary-info">
                     <div class="print-summary-grid">
                         <div class="print-summary-item">
@@ -379,7 +376,6 @@
                     <tbody id="raPrintTableBody"></tbody>
                 </table>
 
-                <!-- DAILY INFORMATION UNTUK LEMBARAN CETAK / PRINT -->
                 <div class="print-daily-info" id="printDailyInfoSection">
                     <h4>Daily Information</h4>
                     <div class="print-daily-grid">
@@ -460,7 +456,6 @@
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
     }
 
-    // Fungsi Reset di Tab General & Weight
     window.resetGeneralTabDefaults = function() {
         if (typeof MANNING_RULES !== "undefined") {
             document.getElementById('sw_stay').value = MANNING_RULES.credits.stayover;
@@ -475,7 +470,6 @@
         }
     }
 
-    // Fungsi khusus untuk reset Tab Daily Information
     window.clearDailyInfo = function() {
         document.getElementById('sw_project').value = "";
         document.getElementById('sw_reminder').value = "";
@@ -501,13 +495,11 @@
             width: '90%',
             maxWidth: '560px',
             html: `
-                <!-- TAB NAVIGATION -->
                 <div class="swal-tab-buttons">
                     <button id="tab_btn_general" class="swal-tab-btn active" onclick="switchSwalTab('general')"><i class="fa-solid fa-sliders"></i> General & Weights</button>
                     <button id="tab_btn_daily" class="swal-tab-btn" onclick="switchSwalTab('daily')"><i class="fa-solid fa-calendar-day"></i> Daily Information</button>
                 </div>
 
-                <!-- TAB 1: GENERAL & WEIGHTS (Dengan Tombol Reset) -->
                 <div id="tab_content_general" class="swal-tab-content active">
                     <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
                     <p style="font-size:11px; color:#64748b; margin-bottom:6px;">Enter staff names to replace labels RA1, RA2, etc.:</p>
@@ -566,7 +558,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: DAILY INFORMATION -->
                 <div id="tab_content_daily" class="swal-tab-content">
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div>
@@ -794,11 +785,16 @@
             let allowStayover = true;
 
             if (nameUpper.includes("DW")) {
-                targetCap = capacityMap.creditDW;
+                targetCap = Math.min(capacityMap.creditDW, 12);
                 allowStayover = false;
             } else if (nameUpper.includes("TRAINEE")) {
-                targetCap = capacityMap.creditTrainee;
+                targetCap = Math.min(capacityMap.creditTrainee, 12);
                 allowStayover = false;
+            }
+
+            // ATURAN TAMBAHAN: Jika RA tidak boleh Stayover, batas kapasitas maksimalnya dinaikkan/dibatasi maks 12
+            if (!allowStayover) {
+                targetCap = Math.min(targetCap, 12);
             }
 
             raAllocations.push({ 
@@ -865,7 +861,6 @@
         let displayedIndex = 0;
 
         raAllocations.forEach((ra) => {
-            // SYARAT 3: HANYA TAMPILKAN RA YANG MEMILIKI CREDIT > 0
             if (ra.credit <= 0) return;
 
             displayedIndex++;
@@ -922,7 +917,6 @@
         });
         document.getElementById("printDate").innerText = formattedDate;
 
-        // POPULATE METRIK FORECAST & SERVICE KE LEMBAR CETAK
         document.getElementById("printSoldVal").innerText = document.getElementById("tonightOcc")?.value || "0";
         document.getElementById("printArrivalVal").innerText = document.getElementById("arrival")?.value || "0";
         document.getElementById("printDepartureVal").innerText = document.getElementById("departure")?.value || "0";
@@ -930,7 +924,6 @@
         document.getElementById("printBacklogVal").innerText = document.getElementById("backlog")?.value || "0";
         document.getElementById("printPickupVal").innerText = document.getElementById("pickup")?.value || "0";
 
-        // POPULATE DAILY INFORMATION KE LEMBAR CETAK
         document.getElementById("printProjectVal").innerText = dailyInfo.project?.trim() ? dailyInfo.project : "-";
         document.getElementById("printReminderVal").innerText = dailyInfo.reminder?.trim() ? dailyInfo.reminder : "-";
         document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
