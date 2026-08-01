@@ -115,8 +115,8 @@
         .swal-ra-input { font-size: 12px !important; padding: 6px 8px !important; margin: 0 !important; height: 32px !important; width: 100% !important; }
         .swal-textarea { width: 100%; height: 55px; font-size: 12px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; resize: vertical; background: #f8fafc; }
         
-        .btn-clear-daily { background-color: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; float: right; margin-top: 4px; transition: background 0.2s; }
-        .btn-clear-daily:hover { background-color: #dc2626; }
+        .btn-tab-reset { background-color: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; float: right; margin-top: 8px; transition: background 0.2s; }
+        .btn-tab-reset:hover { background-color: #dc2626; }
 
         @media (max-width: 600px) {
             .swal-ra-grid { grid-template-columns: 1fr; max-height: 140px; }
@@ -127,28 +127,35 @@
         .print-table { display: none; }
         .print-only-header { display: none; }
         .print-daily-info { display: none; }
+        .print-summary-info { display: none; }
 
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
             .pos-header, .left-panel, .receipt-card, .staff-summary-combined, .btn-action-group, .btn-settings, .pos-card h3 { display: none !important; }
             .pos-container, .pos-grid, .right-panel, .pos-card { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; background: transparent !important; }
             
-            .print-only-header { display: block !important; text-align: center; margin-bottom: 20px; }
+            .print-only-header { display: block !important; text-align: center; margin-bottom: 12px; }
             .print-only-header h2 { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #000; letter-spacing: 0.5px; margin-bottom: 4px; }
             .print-only-header p { font-size: 12px; color: #444; margin: 0; }
 
+            /* CETAK RINGKASAN FORECAST & SERVICE DI ATAS TABEL */
+            .print-summary-info { display: block !important; margin-bottom: 14px; border: 1px solid #000; padding: 8px 12px; font-size: 11px; }
+            .print-summary-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; text-align: center; }
+            .print-summary-item span { display: block; font-size: 9px; font-weight: bold; text-transform: uppercase; color: #333; }
+            .print-summary-item b { font-size: 13px; color: #000; }
+
             .ra-card-list { display: none !important; }
-            .print-table { display: table !important; width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-            .print-table th, .print-table td { border: 1px solid #000 !important; padding: 8px 10px; text-align: left; vertical-align: middle; }
-            .print-table th { background-color: #f2f2f2 !important; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 11px; }
+            .print-table { display: table !important; width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
+            .print-table th, .print-table td { border: 1px solid #000 !important; padding: 6px 8px; text-align: left; vertical-align: middle; }
+            .print-table th { background-color: #f2f2f2 !important; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 10px; }
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
 
             /* CETAK DAILY INFORMATION DI BAWAH TABEL */
-            .print-daily-info { display: block !important; margin-top: 20px; border: 1px solid #000; padding: 12px; font-size: 11px; }
-            .print-daily-info h4 { font-size: 12px; font-weight: 800; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 8px; text-transform: uppercase; }
-            .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-            .print-daily-item b { display: block; text-transform: uppercase; margin-bottom: 2px; font-size: 10px; }
+            .print-daily-info { display: block !important; margin-top: 16px; border: 1px solid #000; padding: 10px; font-size: 11px; }
+            .print-daily-info h4 { font-size: 11px; font-weight: 800; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 6px; text-transform: uppercase; }
+            .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+            .print-daily-item b { display: block; text-transform: uppercase; margin-bottom: 2px; font-size: 9px; }
         }
     </style>
 </head>
@@ -327,6 +334,37 @@
 
             <div class="pos-card">
                 <h3><i class="fa-solid fa-clipboard-user"></i> Room Attendant Distribution</h3>
+                
+                <!-- INFORMASI DENGAN TAMPILAN PRINT KHUSUS DI ATAS TABEL -->
+                <div class="print-summary-info">
+                    <div class="print-summary-grid">
+                        <div class="print-summary-item">
+                            <span>Room Sold</span>
+                            <b id="printSoldVal">0</b>
+                        </div>
+                        <div class="print-summary-item">
+                            <span>Arrival</span>
+                            <b id="printArrivalVal">0</b>
+                        </div>
+                        <div class="print-summary-item">
+                            <span>Departure</span>
+                            <b id="printDepartureVal">0</b>
+                        </div>
+                        <div class="print-summary-item">
+                            <span>Turn Down</span>
+                            <b id="printTurndownVal">0</b>
+                        </div>
+                        <div class="print-summary-item">
+                            <span>Dropped Room</span>
+                            <b id="printBacklogVal">0</b>
+                        </div>
+                        <div class="print-summary-item">
+                            <span>Pick Up</span>
+                            <b id="printPickupVal">0</b>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="raAllocationList" class="ra-card-list"></div>
 
                 <table id="raPrintTable" class="print-table">
@@ -422,6 +460,21 @@
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
     }
 
+    // Fungsi Reset di Tab General & Weight
+    window.resetGeneralTabDefaults = function() {
+        if (typeof MANNING_RULES !== "undefined") {
+            document.getElementById('sw_stay').value = MANNING_RULES.credits.stayover;
+            document.getElementById('sw_dep').value = MANNING_RULES.credits.departure;
+            document.getElementById('sw_back').value = MANNING_RULES.credits.dropped;
+            document.getElementById('sw_pick').value = MANNING_RULES.credits.pickup;
+            document.getElementById('sw_creditRA').value = MANNING_RULES.targetCreditPerRA;
+            document.getElementById('sw_creditDW').value = MANNING_RULES.creditDW || 12;
+            document.getElementById('sw_creditTrainee').value = MANNING_RULES.creditTrainee || 10;
+            document.getElementById('sw_maxStayRooms').value = 6;
+            document.getElementById('sw_spv').value = MANNING_RULES.targetArrivalPerSupervisor || 17;
+        }
+    }
+
     // Fungsi khusus untuk reset Tab Daily Information
     window.clearDailyInfo = function() {
         document.getElementById('sw_project').value = "";
@@ -454,7 +507,7 @@
                     <button id="tab_btn_daily" class="swal-tab-btn" onclick="switchSwalTab('daily')"><i class="fa-solid fa-calendar-day"></i> Daily Information</button>
                 </div>
 
-                <!-- TAB 1: GENERAL & WEIGHTS -->
+                <!-- TAB 1: GENERAL & WEIGHTS (Dengan Tombol Reset) -->
                 <div id="tab_content_general" class="swal-tab-content active">
                     <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
                     <p style="font-size:11px; color:#64748b; margin-bottom:6px;">Enter staff names to replace labels RA1, RA2, etc.:</p>
@@ -505,9 +558,15 @@
                             <input id="sw_spv" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('spvGoal').value}">
                         </div>
                     </div>
+
+                    <div style="margin-top:10px; overflow:hidden;">
+                        <button type="button" class="btn-tab-reset" onclick="resetGeneralTabDefaults()">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+                        </button>
+                    </div>
                 </div>
 
-                <!-- TAB 2: DAILY INFORMATION (Dengan Tombol Reset Khusus Daily) -->
+                <!-- TAB 2: DAILY INFORMATION -->
                 <div id="tab_content_daily" class="swal-tab-content">
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div>
@@ -523,7 +582,7 @@
                             <textarea id="sw_vip" class="swal-textarea" placeholder="Input VIP in House...">${dailyInfo.vip || ''}</textarea>
                         </div>
                         <div>
-                            <button type="button" class="btn-clear-daily" onclick="clearDailyInfo()">
+                            <button type="button" class="btn-tab-reset" onclick="clearDailyInfo()">
                                 <i class="fa-solid fa-eraser"></i> Clear Daily Info
                             </button>
                         </div>
@@ -531,7 +590,6 @@
                 </div>
             `,
             showCancelButton: true,
-            showDenyButton: false, // Dihapus tombol Reset global
             confirmButtonText: 'Save',
             cancelButtonText: 'Cancel',
             confirmButtonColor: '#0284c7',
@@ -804,7 +862,14 @@
             }
         }
 
+        let displayedIndex = 0;
+
         raAllocations.forEach((ra) => {
+            // SYARAT 3: HANYA TAMPILKAN RA YANG MEMILIKI CREDIT > 0
+            if (ra.credit <= 0) return;
+
+            displayedIndex++;
+
             let taskTextArr = [];
             for (let [tName, tQty] of Object.entries(ra.tasks)) {
                 if (tQty > 0) taskTextArr.push(`${tQty} ${tName}`);
@@ -836,13 +901,18 @@
 
             let tr = document.createElement("tr");
             tr.innerHTML = `
-                <td class="center">${ra.id}</td>
+                <td class="center">${displayedIndex}</td>
                 <td class="bold">${ra.name}</td>
                 <td class="center">${ra.credit.toFixed(1)} / ${ra.targetCap}</td>
                 <td>${taskText}${specialPrintText}</td>
             `;
             printTableBody.appendChild(tr);
         });
+
+        if (displayedIndex === 0) {
+            listContainer.innerHTML = `<div style="text-align:center; font-size:12px; color:#94a3b8; padding:10px;">No task allocation yet.</div>`;
+            printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
+        }
     }
 
     function printDistribution() {
@@ -851,6 +921,14 @@
             weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
         });
         document.getElementById("printDate").innerText = formattedDate;
+
+        // POPULATE METRIK FORECAST & SERVICE KE LEMBAR CETAK
+        document.getElementById("printSoldVal").innerText = document.getElementById("tonightOcc")?.value || "0";
+        document.getElementById("printArrivalVal").innerText = document.getElementById("arrival")?.value || "0";
+        document.getElementById("printDepartureVal").innerText = document.getElementById("departure")?.value || "0";
+        document.getElementById("printTurndownVal").innerText = document.getElementById("turndown")?.value || "0";
+        document.getElementById("printBacklogVal").innerText = document.getElementById("backlog")?.value || "0";
+        document.getElementById("printPickupVal").innerText = document.getElementById("pickup")?.value || "0";
 
         // POPULATE DAILY INFORMATION KE LEMBAR CETAK
         document.getElementById("printProjectVal").innerText = dailyInfo.project?.trim() ? dailyInfo.project : "-";
