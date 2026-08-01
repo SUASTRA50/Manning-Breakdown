@@ -64,7 +64,7 @@
         .total-badge { font-size: 18px; font-weight: bold; color: #0284c7; }
         .credit-box { width: 70px; font-weight: bold; }
 
-        /* REVISI 2: COMBINED STAFF SUMMARY CARD */
+        /* COMBINED STAFF SUMMARY CARD */
         .staff-summary-combined { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 16px; border: 1px solid #f1f5f9; }
         .staff-item-box { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 10px 12px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .staff-item-info { display: flex; align-items: center; gap: 10px; }
@@ -113,7 +113,10 @@
             background: #f8fafc; 
         }
         .swal-ra-input { font-size: 12px !important; padding: 6px 8px !important; margin: 0 !important; height: 32px !important; width: 100% !important; }
-        .swal-textarea { width: 100%; height: 60px; font-size: 12px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; resize: vertical; background: #f8fafc; }
+        .swal-textarea { width: 100%; height: 55px; font-size: 12px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; resize: vertical; background: #f8fafc; }
+        
+        .btn-clear-daily { background-color: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; float: right; margin-top: 4px; transition: background 0.2s; }
+        .btn-clear-daily:hover { background-color: #dc2626; }
 
         @media (max-width: 600px) {
             .swal-ra-grid { grid-template-columns: 1fr; max-height: 140px; }
@@ -123,6 +126,7 @@
         /* PRINT STYLING */
         .print-table { display: none; }
         .print-only-header { display: none; }
+        .print-daily-info { display: none; }
 
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
@@ -139,6 +143,12 @@
             .print-table th { background-color: #f2f2f2 !important; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 11px; }
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
+
+            /* CETAK DAILY INFORMATION DI BAWAH TABEL */
+            .print-daily-info { display: block !important; margin-top: 20px; border: 1px solid #000; padding: 12px; font-size: 11px; }
+            .print-daily-info h4 { font-size: 12px; font-weight: 800; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 8px; text-transform: uppercase; }
+            .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+            .print-daily-item b { display: block; text-transform: uppercase; margin-bottom: 2px; font-size: 10px; }
         }
     </style>
 </head>
@@ -156,7 +166,6 @@
                 <p>Daily Staffing Planner</p>
             </div>
         </div>
-        <!-- REVISI 4: Default Capacity dikunci ke 272 Rooms -->
         <div class="capacity-display">
             Capacity
             <b>272 Rooms</b>
@@ -207,7 +216,6 @@
                 </div>
             </div>
 
-            <!-- REVISI 3: Dibuat 1 Card gabungan SPECIAL SERVICE -->
             <div class="pos-card">
                 <h3><i class="fa-solid fa-star"></i> SPECIAL SERVICE</h3>
                 <div class="input-group">
@@ -265,8 +273,6 @@
                     <span id="pickTotal" class="subtotal">0.0</span>
                 </div>
 
-                <!-- REVISI 1: Baris Turn Down di Workload Summary telah DIHAPUS -->
-
                 <div class="receipt-divider"></div>
 
                 <div class="summary">
@@ -295,7 +301,6 @@
                 </div>
             </div>
 
-            <!-- REVISI 2: Required Room Attendant dan Required Supervisor digabung dalam 1 Pos Card -->
             <div class="staff-summary-combined">
                 <div class="staff-item-box">
                     <div class="staff-item-info">
@@ -336,6 +341,25 @@
                     <tbody id="raPrintTableBody"></tbody>
                 </table>
 
+                <!-- DAILY INFORMATION UNTUK LEMBARAN CETAK / PRINT -->
+                <div class="print-daily-info" id="printDailyInfoSection">
+                    <h4>Daily Information</h4>
+                    <div class="print-daily-grid">
+                        <div class="print-daily-item">
+                            <b>Project of the Day:</b>
+                            <span id="printProjectVal">-</span>
+                        </div>
+                        <div class="print-daily-item">
+                            <b>Reminder of the Day:</b>
+                            <span id="printReminderVal">-</span>
+                        </div>
+                        <div class="print-daily-item">
+                            <b>VIP in House:</b>
+                            <span id="printVipVal">-</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="btn-action-group">
                     <button id="printBtn" onclick="printDistribution()">
                         <i class="fa-solid fa-print"></i> PRINT DISTRIBUTION
@@ -353,11 +377,9 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0EOOMwRPMwuAAE3LHH8EbJkR9U-tin4_EMX10q8yRnTEK1o13dO329y6PEYNs8L7F/exec";
 
     let raCustomNames = {};
-    // REVISI 6: Berubah menjadi batas jumlah kamar (Max Stayover Room)
     let maxStayoverRooms = 6; 
-    const DEFAULT_CAPACITY = 272; // REVISI 4: Default 272 Rooms
+    const DEFAULT_CAPACITY = 272;
 
-    // REVISI 7: Variabel Daily Information
     let dailyInfo = {
         project: "",
         reminder: "",
@@ -381,26 +403,30 @@
             try { raCustomNames = JSON.parse(savedNames); } catch (e) { raCustomNames = {}; }
         }
 
-        // REVISI 6: Load Max Stayover Rooms
         const savedMaxStayRooms = localStorage.getItem("maxStayoverRooms");
         if (savedMaxStayRooms !== null) {
             maxStayoverRooms = Number(savedMaxStayRooms);
         }
 
-        // REVISI 7: Load Daily Information
         const savedDailyInfo = localStorage.getItem("dailyInfo");
         if (savedDailyInfo) {
             try { dailyInfo = JSON.parse(savedDailyInfo); } catch(e) {}
         }
     }
 
-    // Function untuk Switch Tab di Modal Settings
     window.switchSwalTab = function(tabName) {
         document.querySelectorAll('.swal-tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.swal-tab-content').forEach(content => content.classList.remove('active'));
 
         document.getElementById(`tab_btn_${tabName}`).classList.add('active');
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
+    }
+
+    // Fungsi khusus untuk reset Tab Daily Information
+    window.clearDailyInfo = function() {
+        document.getElementById('sw_project').value = "";
+        document.getElementById('sw_reminder').value = "";
+        document.getElementById('sw_vip').value = "";
     }
 
     function openSettingsModal() {
@@ -437,7 +463,6 @@
                     </div>
 
                     <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-weight-hanging"></i> WEIGHT & TARGET SETTINGS</h4>
-                    <!-- REVISI 5: Input Turn Down Weight telah DIHAPUS -->
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                         <div>
                             <label><b>Stayover Weight:</b></label>
@@ -472,7 +497,6 @@
                     <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-chart-pie"></i> ALLOCATION RULES</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                         <div>
-                            <!-- REVISI 6: Diubah menjadi Max Stayover Room (Jumlah kamar) -->
                             <label><b>Max Stayover Room:</b></label>
                             <input id="sw_maxStayRooms" type="number" class="swal2-input swal-ra-input" value="${maxStayoverRooms}" min="0" placeholder="e.g. 6">
                         </div>
@@ -483,7 +507,7 @@
                     </div>
                 </div>
 
-                <!-- REVISI 7: TAB 2: DAILY INFORMATION -->
+                <!-- TAB 2: DAILY INFORMATION (Dengan Tombol Reset Khusus Daily) -->
                 <div id="tab_content_daily" class="swal-tab-content">
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div>
@@ -498,16 +522,19 @@
                             <label><b>VIP in House:</b></label>
                             <textarea id="sw_vip" class="swal-textarea" placeholder="Input VIP in House...">${dailyInfo.vip || ''}</textarea>
                         </div>
+                        <div>
+                            <button type="button" class="btn-clear-daily" onclick="clearDailyInfo()">
+                                <i class="fa-solid fa-eraser"></i> Clear Daily Info
+                            </button>
+                        </div>
                     </div>
                 </div>
             `,
             showCancelButton: true,
-            showDenyButton: true,
+            showDenyButton: false, // Dihapus tombol Reset global
             confirmButtonText: 'Save',
             cancelButtonText: 'Cancel',
-            denyButtonText: 'Reset',
             confirmButtonColor: '#0284c7',
-            denyButtonColor: '#ef4444',
             didOpen: () => {
                 const raGrid = document.getElementById('swalRaGrid');
                 if (raGrid) {
@@ -565,26 +592,6 @@
                 
                 calculate();
                 Swal.fire({ icon: 'success', title: 'Saved!', text: 'Settings updated successfully.', timer: 1500, showConfirmButton: false });
-            } else if (result.isDenied) {
-                maxStayoverRooms = 0;
-                raCustomNames = {};
-                dailyInfo = { project: "", reminder: "", vip: "" };
-
-                localStorage.setItem("maxStayoverRooms", 0);
-                localStorage.removeItem("raCustomNames");
-                localStorage.removeItem("dailyInfo");
-
-                document.getElementById('stayCredit').value = 0;
-                document.getElementById('depCredit').value = 0;
-                document.getElementById('backCredit').value = 0;
-                document.getElementById('pickCredit').value = 0;
-                document.getElementById('creditRA').value = 0;
-                document.getElementById('creditDW').value = 0;
-                document.getElementById('creditTrainee').value = 0;
-                document.getElementById('spvGoal').value = 0;
-
-                calculate();
-                Swal.fire({ icon: 'info', title: 'Reset Complete', text: 'All settings have been reset.', timer: 1500, showConfirmButton: false });
             }
         });
     }
@@ -678,14 +685,12 @@
         document.getElementById("backTotal").innerText = backTotal.toFixed(1);
         document.getElementById("pickTotal").innerText = pickTotal.toFixed(1);
 
-        // REVISI 1: Total Cleaning Credit murni dari Stayover, Dep, Backlog, Pickup
         let total = stayTotal + depTotal + backTotal + pickTotal;
         document.getElementById("totalCleaning").innerText = total.toFixed(1);
 
         let raNeeded = creditRA > 0 ? Math.ceil(total / creditRA) : 0;
         document.getElementById("requiredRA").innerText = raNeeded;
 
-        // REVISI 8: Pembulatan Required Supervisor (>= 0.4 ke atas, < 0.4 ke bawah)
         let spvNeeded = 0;
         if (arrival > 0 && spvGoal > 0) {
             let rawSpv = arrival / spvGoal;
@@ -777,7 +782,6 @@
 
                 let maxRoomsAllowed = Math.floor((remainingGeneralCap + 0.0001) / task.weight);
 
-                // REVISI 6: Pembatasan Stayover berdasarkan JUMLAH KAMAR (maxStayoverRooms)
                 if (task.isStayover && maxStayoverRooms > 0) {
                     let roomCapLeft = maxStayoverRooms - ra.stayRoomsAssigned;
                     if (roomCapLeft <= 0) continue;
@@ -847,6 +851,12 @@
             weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
         });
         document.getElementById("printDate").innerText = formattedDate;
+
+        // POPULATE DAILY INFORMATION KE LEMBAR CETAK
+        document.getElementById("printProjectVal").innerText = dailyInfo.project?.trim() ? dailyInfo.project : "-";
+        document.getElementById("printReminderVal").innerText = dailyInfo.reminder?.trim() ? dailyInfo.reminder : "-";
+        document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
+
         window.print();
     }
 
