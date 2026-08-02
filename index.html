@@ -19,12 +19,23 @@
         
         /* HEADER & BRANDING */
         .pos-header { background: #ffffff; padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 12px; }
-        .brand { display: flex; align-items: center; gap: 10px; }
-        .brand h1 { font-size: 14px; font-weight: 700; color: #0f172a; letter-spacing: 0.3px; }
-        .brand p { font-size: 10px; color: #64748b; }
+        .brand { display: flex; align-items: center; gap: 12px; }
         
-        .btn-settings { background: #e0f2fe; color: #0284c7; border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
-        .btn-settings:hover { background: #bae6fd; transform: rotate(30deg); }
+        /* LOGO GEDUNG DI HEADER */
+        .brand-icon-box { 
+            background: #e0f2fe; 
+            color: #0284c7; 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 22px; 
+            box-shadow: 0 2px 4px rgba(2, 132, 199, 0.15);
+        }
+        .brand h1 { font-size: 15px; font-weight: 700; color: #0f172a; letter-spacing: 0.3px; }
+        .brand p { font-size: 10px; color: #64748b; }
 
         .capacity-display { text-align: right; font-size: 11px; color: #64748b; line-height: 1.2; }
         .capacity-display b { display: block; font-size: 13px; color: #0f172a; font-weight: 700; }
@@ -32,9 +43,21 @@
         /* GRID LAYOUT */
         .pos-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; }
         @media (max-width: 860px) { .pos-grid { grid-template-columns: 1fr; } }
-        .pos-card { background: #ffffff; border-radius: 0 12px 12px 12px; padding: 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 12px; border: 1px solid #cbd5e1; }
+        .pos-card { background: #ffffff; border-radius: 12px; padding: 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 12px; border: 1px solid #cbd5e1; }
         .pos-card h3 { font-size: 12px; color: #0284c7; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        
+        .pos-card h3 button.btn-card-settings {
+            margin-left: auto;
+            background: #e0f2fe;
+            color: #0284c7;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        .pos-card h3 button.btn-card-settings:hover { background: #bae6fd; }
+
         /* BINDER FILE DIVIDER TABS STYLING */
         .binder-tab-wrapper { display: flex; margin-bottom: -1px; position: relative; z-index: 2; padding-left: 4px; gap: 4px; }
         .binder-tab {
@@ -76,7 +99,7 @@
         .input-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .input-group label { font-size: 12px; color: #475569; font-weight: 500; }
         .input-group input, .row input, .summary input { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; text-align: right; background: #f8fafc; transition: all 0.2s; }
-        .input-group input { width: 85px; } /* Semua input di tab forecast kini konsisten 85px */
+        .input-group input { width: 85px; }
         .input-group input[type="text"] { text-align: right; }
         .input-group input#planBy { width: 140px; text-align: left; }
         .input-group input[readonly] { background-color: #e2e8f0; color: #475569; font-weight: 600; }
@@ -114,7 +137,7 @@
         .ra-details { font-size: 10px; color: #475569; line-height: 1.3; background: #ffffff; padding: 6px; border-radius: 6px; border: 1px dashed #cbd5e1; }
         .special-project-badge { margin-top: 2px; font-size: 10px; font-weight: 600; color: #b45309; background: #fef3c7; padding: 2px 6px; border-radius: 4px; display: inline-block; }
         
-        /* ACTION BUTTONS (1 BARIS KANAN KIRI) */
+        /* ACTION BUTTONS */
         .btn-action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         
         #printBtn { width: 100%; padding: 10px; background-color: #059669; color: white; border: none; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2); }
@@ -125,14 +148,7 @@
         #submitBtn:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
         /* MODAL CUSTOM STYLES */
-        .swal-tab-body {
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 0 8px 8px 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
+        .swal-tab-body { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0 8px 8px 8px; padding: 12px; margin-bottom: 12px; }
         .swal-tab-content { display: none; text-align: left; font-size: 12px; max-height: 55vh; overflow-y: auto; padding-right: 4px; }
         .swal-tab-content.active { display: block; }
 
@@ -153,25 +169,8 @@
         .swal-textarea { width: 100%; height: 46px; font-size: 11px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; resize: vertical; background: #f8fafc; }
 
         /* CUSTOM MODAL ACTION BUTTONS (1 BARIS) */
-        .swal-action-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin-top: 8px;
-        }
-        .btn-swal-action {
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
+        .swal-action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
+        .btn-swal-action { padding: 8px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .btn-swal-save { background: #0284c7; color: white; }
         .btn-swal-save:hover { background: #0369a1; }
         .btn-swal-reset { background: #eab308; color: white; }
@@ -224,9 +223,10 @@
 <div class="pos-container">
     <header class="pos-header">
         <div class="brand">
-            <button class="btn-settings" onclick="openSettingsModal()" title="Open Settings">
-                <i class="fa-solid fa-gear"></i>
-            </button>
+            <!-- LOGO GEDUNG PROPORSIONAL -->
+            <div class="brand-icon-box">
+                <i class="fa-solid fa-building"></i>
+            </div>
             <div>
                 <h1>MANNING CALCULATOR</h1>
                 <p>Daily Staffing Planner</p>
@@ -246,7 +246,7 @@
     <div class="pos-grid">
         <!-- LEFT PANEL -->
         <div class="left-panel">
-            <div class="pos-card" style="border-radius: 12px;">
+            <div class="pos-card">
                 <h3><i class="fa-solid fa-user-pen"></i> Planner Info</h3>
                 
                 <div class="last-submit-info" id="lastSubmitBox">
@@ -276,11 +276,10 @@
                 </button>
             </div>
 
-            <div class="pos-card">
+            <div class="pos-card" style="border-radius: 0 12px 12px 12px;">
                 <!-- TAB 1: HOTEL FORECAST -->
                 <div id="tab_content_forecast" class="binder-content active">
                     <h3><i class="fa-solid fa-chart-line"></i> Hotel Forecast</h3>
-                    <!-- Room Occ (%) ditaruh di paling atas dan ukurannya seragam 85px -->
                     <div class="input-group">
                         <label for="roomOccPerc">Room Occ (%)</label>
                         <input type="text" id="roomOccPerc" placeholder="0%" readonly>
@@ -316,91 +315,83 @@
                     </div>
                 </div>
             </div>
+
+            <!-- POS CARD BARU: SETTING ROLE (DITERAPKAN DI ANTARA FORECAST DAN TASK) -->
+            <div class="pos-card">
+                <h3>
+                    <span><i class="fa-solid fa-gear"></i> Setting Role</span>
+                    <button class="btn-card-settings" onclick="openSettingsModal()" title="Advanced Settings">
+                        <i class="fa-solid fa-sliders"></i> Advanced
+                    </button>
+                </h3>
+                
+                <div class="summary">
+                    <label for="creditRA">Credit / RA Capacity</label>
+                    <input id="creditRA" type="number" class="credit-box" value="14">
+                </div>
+
+                <div class="summary">
+                    <label for="creditDW">Credit DW</label>
+                    <input id="creditDW" type="number" class="credit-box" value="11">
+                </div>
+
+                <div class="summary">
+                    <label for="creditTrainee">Credit Trainee</label>
+                    <input id="creditTrainee" type="number" class="credit-box" value="5">
+                </div>
+
+                <div class="summary" style="margin-bottom:0;">
+                    <label for="spvGoal">Supervisor Goal</label>
+                    <input id="spvGoal" type="number" class="credit-box" value="17">
+                </div>
+            </div>
         </div>
 
         <!-- RIGHT PANEL -->
         <div class="right-panel">
-            <!-- BINDER TABS FOR WORKLOAD SUMMARY -->
-            <div class="binder-tab-wrapper">
-                <button class="binder-tab active" id="tab_btn_task" onclick="switchBinderTab('rightGroup', 'task')">
-                    <i class="fa-solid fa-list-check"></i> Tasks
-                </button>
-                <button class="binder-tab" id="tab_btn_role" onclick="switchBinderTab('rightGroup', 'role')">
-                    <i class="fa-solid fa-sliders"></i> Role Credits
-                </button>
-            </div>
-
             <div class="pos-card receipt-card">
-                <!-- TAB 1: TASK SUMMARY -->
-                <div id="tab_content_task" class="binder-content active">
-                    <h3><i class="fa-solid fa-receipt"></i> Workload Summary</h3>
-                    
-                    <div class="table-header">
-                        <span>Task</span>
-                        <span>Qty</span>
-                        <span>Weight</span>
-                        <span>Total</span>
-                    </div>
-
-                    <div class="row">
-                        <span class="task-name">Stayover</span>
-                        <input id="stayQty" type="number" readonly placeholder="0">
-                        <input id="stayCredit" type="number" step="0.01" value="0.8">
-                        <span id="stayTotal" class="subtotal">0.0</span>
-                    </div>
-
-                    <div class="row">
-                        <span class="task-name">Departure</span>
-                        <input id="depQty" type="number" readonly placeholder="0">
-                        <input id="depCredit" type="number" step="0.01" value="1">
-                        <span id="depTotal" class="subtotal">0.0</span>
-                    </div>
-
-                    <div class="row">
-                        <span class="task-name">Dropped Room</span>
-                        <input id="backQty" type="number" readonly placeholder="0">
-                        <input id="backCredit" type="number" step="0.01" value="1">
-                        <span id="backTotal" class="subtotal">0.0</span>
-                    </div>
-
-                    <div class="row">
-                        <span class="task-name">Pick-up</span>
-                        <input id="pickQty" type="number" readonly placeholder="0">
-                        <input id="pickCredit" type="number" step="0.01" value="0.4">
-                        <span id="pickTotal" class="subtotal">0.0</span>
-                    </div>
-
-                    <div class="receipt-divider"></div>
-
-                    <div class="summary">
-                        <label>Total Cleaning Credit</label>
-                        <span id="totalCleaning" class="total-badge">0.0</span>
-                    </div>
+                <h3><i class="fa-solid fa-receipt"></i> Workload Summary</h3>
+                
+                <div class="table-header">
+                    <span>Task</span>
+                    <span>Qty</span>
+                    <span>Weight</span>
+                    <span>Total</span>
                 </div>
 
-                <!-- TAB 2: ROLE CREDIT SETTINGS -->
-                <div id="tab_content_role" class="binder-content">
-                    <h3><i class="fa-solid fa-user-gear"></i> Role Credit Targets</h3>
-                    
-                    <div class="summary">
-                        <label for="creditRA">Credit / RA Capacity</label>
-                        <input id="creditRA" type="number" class="credit-box" value="14">
-                    </div>
+                <div class="row">
+                    <span class="task-name">Stayover</span>
+                    <input id="stayQty" type="number" readonly placeholder="0">
+                    <input id="stayCredit" type="number" step="0.01" value="0.8">
+                    <span id="stayTotal" class="subtotal">0.0</span>
+                </div>
 
-                    <div class="summary">
-                        <label for="creditDW">Credit DW</label>
-                        <input id="creditDW" type="number" class="credit-box" value="11">
-                    </div>
+                <div class="row">
+                    <span class="task-name">Departure</span>
+                    <input id="depQty" type="number" readonly placeholder="0">
+                    <input id="depCredit" type="number" step="0.01" value="1">
+                    <span id="depTotal" class="subtotal">0.0</span>
+                </div>
 
-                    <div class="summary">
-                        <label for="creditTrainee">Credit Trainee</label>
-                        <input id="creditTrainee" type="number" class="credit-box" value="5">
-                    </div>
+                <div class="row">
+                    <span class="task-name">Dropped Room</span>
+                    <input id="backQty" type="number" readonly placeholder="0">
+                    <input id="backCredit" type="number" step="0.01" value="1">
+                    <span id="backTotal" class="subtotal">0.0</span>
+                </div>
 
-                    <div class="summary">
-                        <label for="spvGoal">Supervisor Goal</label>
-                        <input id="spvGoal" type="number" class="credit-box" value="17">
-                    </div>
+                <div class="row">
+                    <span class="task-name">Pick-up</span>
+                    <input id="pickQty" type="number" readonly placeholder="0">
+                    <input id="pickCredit" type="number" step="0.01" value="0.4">
+                    <span id="pickTotal" class="subtotal">0.0</span>
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <div class="summary">
+                    <label>Total Cleaning Credit</label>
+                    <span id="totalCleaning" class="total-badge">0.0</span>
                 </div>
             </div>
 
@@ -428,7 +419,7 @@
                 </div>
             </div>
 
-            <div class="pos-card" style="border-radius: 12px;">
+            <div class="pos-card">
                 <h3><i class="fa-solid fa-clipboard-user"></i> Room Attendant Distribution</h3>
                 
                 <div class="print-summary-info">
@@ -529,14 +520,6 @@
             document.getElementById('tab_btn_special').classList.remove('active');
             document.getElementById('tab_content_forecast').classList.remove('active');
             document.getElementById('tab_content_special').classList.remove('active');
-
-            document.getElementById(`tab_btn_${tabName}`).classList.add('active');
-            document.getElementById(`tab_content_${tabName}`).classList.add('active');
-        } else if (group === 'rightGroup') {
-            document.getElementById('tab_btn_task').classList.remove('active');
-            document.getElementById('tab_btn_role').classList.remove('active');
-            document.getElementById('tab_content_task').classList.remove('active');
-            document.getElementById('tab_content_role').classList.remove('active');
 
             document.getElementById(`tab_btn_${tabName}`).classList.add('active');
             document.getElementById(`tab_content_${tabName}`).classList.add('active');
@@ -835,7 +818,6 @@
             tonightOcc = 0;
         }
 
-        // PERHITUNGAN ROOM OCCUPANCY PERCENTAGE
         let occPerc = tonightOcc > 0 ? ((tonightOcc / DEFAULT_CAPACITY) * 100).toFixed(1) : 0;
         document.getElementById("roomOccPerc").value = occPerc + "%";
 
