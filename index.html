@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 CSS & JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- IMPOR FILE RULES/KONFIGURASI -->
+    <script src="rules.js"></script>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -54,7 +57,7 @@
         }
         .pos-card h3 button.btn-card-settings:hover { background: #bae6fd; }
 
-        /* BINDER TABS STYLING */
+        /* BINDER FILE DIVIDER TABS STYLING */
         .binder-tab-wrapper { display: flex; margin-bottom: -1px; position: relative; z-index: 2; padding-left: 4px; gap: 4px; overflow-x: auto; }
         .binder-tab {
             padding: 6px 12px;
@@ -97,6 +100,7 @@
         .input-group label { font-size: 12px; color: #475569; font-weight: 500; }
         .input-group input, .row input, .summary input { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; text-align: right; background: #f8fafc; transition: all 0.2s; }
         .input-group input { width: 85px; }
+        .input-group input[type="text"] { text-align: right; }
         .input-group input#planBy { width: 140px; text-align: left; }
         .input-group input[readonly] { background-color: #e2e8f0; color: #475569; font-weight: 600; }
         .input-group input:focus, .row input:focus, .summary input:focus { border-color: #0284c7; background: #fff; box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15); }
@@ -124,8 +128,8 @@
         .staff-item-sub { font-size: 9px; color: #64748b; }
         .staff-item-value { font-size: 16px; font-weight: 800; color: #0284c7; background: #ffffff; border: 1px solid #bae6fd; padding: 1px 10px; border-radius: 6px; }
 
-        /* DISTRIBUTION LIST */
-        .ra-card-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; max-height: 280px; overflow-y: auto; padding-right: 2px; }
+        /* CARDS & DISTRIBUTION */
+        .ra-card-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; max-height: 260px; overflow-y: auto; padding-right: 2px; }
         .ra-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
         .ra-header { display: flex; justify-content: space-between; align-items: center; }
         .ra-name { font-size: 12px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 4px; }
@@ -133,7 +137,7 @@
         .ra-details { font-size: 10px; color: #475569; line-height: 1.3; background: #ffffff; padding: 6px; border-radius: 6px; border: 1px dashed #cbd5e1; }
         .special-project-badge { margin-top: 2px; font-size: 10px; font-weight: 600; color: #b45309; background: #fef3c7; padding: 2px 6px; border-radius: 4px; display: inline-block; }
         
-        /* DROPPED ROOM TODAY CARD */
+        /* DROPPED ROOM TODAY CARD (WARN STYLE) */
         .dropped-card-banner {
             background: #fffbeb;
             border: 1px solid #fde68a;
@@ -146,11 +150,34 @@
             align-items: center;
             justify-content: space-between;
         }
-        .dropped-card-banner .dropped-info { display: flex; align-items: center; gap: 8px; color: #92400e; }
-        .dropped-card-banner .dropped-info i { font-size: 16px; color: #d97706; }
-        .dropped-card-banner .dropped-title { font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .dropped-card-banner .dropped-sub { font-size: 10px; color: #b45309; }
-        .dropped-card-banner .dropped-badge { font-size: 13px; font-weight: 800; color: #b45309; background: #fef3c7; padding: 2px 10px; border-radius: 6px; border: 1px solid #fde68a; }
+        .dropped-card-banner .dropped-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #92400e;
+        }
+        .dropped-card-banner .dropped-info i {
+            font-size: 16px;
+            color: #d97706;
+        }
+        .dropped-card-banner .dropped-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .dropped-card-banner .dropped-sub {
+            font-size: 10px;
+            color: #b45309;
+        }
+        .dropped-card-banner .dropped-badge {
+            font-size: 13px;
+            font-weight: 800;
+            color: #b45309;
+            background: #fef3c7;
+            padding: 2px 10px;
+            border-radius: 6px;
+            border: 1px solid #fde68a;
+        }
 
         /* ACTION BUTTONS */
         .btn-action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
@@ -162,13 +189,28 @@
         #submitBtn:hover { background-color: #0369a1; }
         #submitBtn:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        /* MODAL STYLES */
+        /* MODAL CUSTOM STYLES */
         .swal-tab-body { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0 8px 8px 8px; padding: 12px; margin-bottom: 12px; }
         .swal-tab-content { display: none; text-align: left; font-size: 12px; max-height: 55vh; overflow-y: auto; padding-right: 4px; }
         .swal-tab-content.active { display: block; }
-        .swal-ra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-height: 130px; overflow-y: auto; padding: 6px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; }
+
+        .swal-ra-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 6px; 
+            max-height: 130px; 
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
+            touch-action: pan-y;
+            padding: 6px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 6px; 
+            background: #f8fafc; 
+        }
         .swal-ra-input { font-size: 11px !important; padding: 4px 6px !important; margin: 0 !important; height: 28px !important; width: 100% !important; }
         .swal-textarea { width: 100%; height: 46px; font-size: 11px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; resize: vertical; background: #f8fafc; }
+
+        /* CUSTOM MODAL ACTION BUTTONS (1 BARIS) */
         .swal-action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
         .btn-swal-action { padding: 8px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .btn-swal-save { background: #0284c7; color: white; }
@@ -178,6 +220,11 @@
         .btn-swal-cancel { background: #64748b; color: white; }
         .btn-swal-cancel:hover { background: #475569; }
 
+        @media (max-width: 600px) {
+            .swal-ra-grid { grid-template-columns: 1fr; max-height: 120px; }
+            .staff-summary-combined { grid-template-columns: 1fr 1fr; }
+        }
+
         /* PRINT STYLING */
         .print-table { display: none; }
         .print-only-header { display: none; }
@@ -186,7 +233,7 @@
 
         @media print {
             body { background: white !important; color: black !important; padding: 0 !important; }
-            .pos-header, .left-panel, .receipt-card, .staff-summary-combined, .btn-action-group, .pos-card h3, .binder-tab-wrapper, .dropped-card-banner { display: none !important; }
+            .pos-header, .left-panel, .receipt-card, .staff-summary-combined, .btn-action-group, .btn-settings, .pos-card h3, .binder-tab-wrapper, .dropped-card-banner { display: none !important; }
             .pos-container, .pos-grid, .right-panel, .pos-card { width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; background: transparent !important; }
             
             .print-only-header { display: block !important; text-align: center; margin-bottom: 10px; }
@@ -261,7 +308,7 @@
                 </div>
             </div>
 
-            <!-- BINDER TABS PANEL KIRI -->
+            <!-- BINDER TABS PANEL KIRI: FORECAST, SPECIAL SERVICE, ROLE CREDITS -->
             <div class="binder-tab-wrapper">
                 <button class="binder-tab active" id="tab_btn_forecast" onclick="switchBinderTab('forecast')">
                     <i class="fa-solid fa-chart-line"></i> Forecast
@@ -313,7 +360,7 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: ROLE CREDITS -->
+                <!-- TAB 3: SETTING ROLE (DIPINDAHKAN KE PANEL KIRI) -->
                 <div id="tab_content_roles" class="binder-content">
                     <h3>
                         <span><i class="fa-solid fa-gear"></i> Setting Role</span>
@@ -333,8 +380,8 @@
                     </div>
 
                     <div class="summary">
-                        <label for="dwCount">Jumlah DW On Duty</label>
-                        <input id="dwCount" type="number" class="credit-box" value="0" min="0">
+                        <label for="creditTrainee">Credit Trainee</label>
+                        <input id="creditTrainee" type="number" class="credit-box" value="5">
                     </div>
 
                     <div class="summary" style="margin-bottom:0;">
@@ -347,7 +394,7 @@
 
         <!-- RIGHT PANEL -->
         <div class="right-panel">
-            <!-- WORKLOAD SUMMARY CARD -->
+            <!-- WORKLOAD SUMMARY CARD (TANPA TAB) -->
             <div class="pos-card receipt-card">
                 <h3><i class="fa-solid fa-receipt"></i> Workload Summary</h3>
                 
@@ -361,21 +408,21 @@
                 <div class="row">
                     <span class="task-name">Stayover</span>
                     <input id="stayQty" type="number" readonly placeholder="0">
-                    <input id="stayCredit" type="number" step="0.01" value="1.0">
+                    <input id="stayCredit" type="number" step="0.01" value="0.8">
                     <span id="stayTotal" class="subtotal">0.0</span>
                 </div>
 
                 <div class="row">
                     <span class="task-name">Departure</span>
                     <input id="depQty" type="number" readonly placeholder="0">
-                    <input id="depCredit" type="number" step="0.01" value="1.0">
+                    <input id="depCredit" type="number" step="0.01" value="1">
                     <span id="depTotal" class="subtotal">0.0</span>
                 </div>
 
                 <div class="row">
                     <span class="task-name">Dropped Room</span>
                     <input id="backQty" type="number" readonly placeholder="0">
-                    <input id="backCredit" type="number" step="0.01" value="1.0">
+                    <input id="backCredit" type="number" step="0.01" value="1">
                     <span id="backTotal" class="subtotal">0.0</span>
                 </div>
 
@@ -458,22 +505,21 @@
                     <thead>
                         <tr>
                             <th style="width: 8%;">No</th>
-                            <th style="width: 22%;">Staff Name</th>
-                            <th style="width: 10%;">Type</th>
-                            <th style="width: 15%;">Total Credit</th>
-                            <th style="width: 45%;">Task Allocation</th>
+                            <th style="width: 25%;">Staff Name</th>
+                            <th style="width: 17%;">Total Credit</th>
+                            <th style="width: 50%;">Task Allocation</th>
                         </tr>
                     </thead>
                     <tbody id="raPrintTableBody"></tbody>
                 </table>
 
-                <!-- CARD DROPPED ROOM TODAY -->
+                <!-- CARD MEMANJANG: DROPPED ROOM TODAY (SISA KREDIT / SELISIH ALOKASI) -->
                 <div id="droppedRoomBanner" class="dropped-card-banner" style="display: none;">
                     <div class="dropped-info">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         <div>
                             <div class="dropped-title">Dropped Room Today</div>
-                            <div class="dropped-sub" id="droppedDetailText">Selisih beban kerja belum dialokasikan</div>
+                            <div class="dropped-sub" id="droppedDetailText">Unallocated Credit Difference</div>
                         </div>
                     </div>
                     <div class="dropped-badge" id="droppedCreditBadge">0.0 Credit</div>
@@ -518,6 +564,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0EOOMwRPMwuAAE3LHH8EbJkR9U-tin4_EMX10q8yRnTEK1o13dO329y6PEYNs8L7F/exec";
 
     let raCustomNames = {};
+    let maxStayoverRooms = 6; 
     const DEFAULT_CAPACITY = 272;
 
     let dailyInfo = {
@@ -527,6 +574,7 @@
         preference: ""
     };
 
+    /* SWITCH TAB PANEL KIRI */
     function switchBinderTab(tabName) {
         document.getElementById('tab_btn_forecast').classList.remove('active');
         document.getElementById('tab_btn_special').classList.remove('active');
@@ -540,10 +588,26 @@
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
     }
 
-    function loadSavedSettings() {
+    function loadRulesToUI() {
+        if (typeof MANNING_RULES !== "undefined") {
+            document.getElementById("stayCredit").value = MANNING_RULES.credits.stayover;
+            document.getElementById("depCredit").value = MANNING_RULES.credits.departure;
+            document.getElementById("backCredit").value = MANNING_RULES.credits.dropped;
+            document.getElementById("pickCredit").value = MANNING_RULES.credits.pickup;
+            document.getElementById("creditRA").value = MANNING_RULES.targetCreditPerRA;
+            document.getElementById("creditDW").value = MANNING_RULES.creditDW || 11;
+            document.getElementById("creditTrainee").value = MANNING_RULES.creditTrainee || 5;
+            document.getElementById("spvGoal").value = MANNING_RULES.targetArrivalPerSupervisor || 17;
+        }
+
         const savedNames = localStorage.getItem("raCustomNames");
         if (savedNames) {
             try { raCustomNames = JSON.parse(savedNames); } catch (e) { raCustomNames = {}; }
+        }
+
+        const savedMaxStayRooms = localStorage.getItem("maxStayoverRooms");
+        if (savedMaxStayRooms !== null) {
+            maxStayoverRooms = Number(savedMaxStayRooms);
         }
 
         const savedDailyInfo = localStorage.getItem("dailyInfo");
@@ -560,6 +624,52 @@
         document.getElementById(`sw_tab_content_${tabName}`).classList.add('active');
     }
 
+    /* RESET SETTINGS DEFAULTS */
+    window.resetGeneralTabDefaults = function() {
+        const isDailyTabActive = document.getElementById('sw_tab_content_daily')?.classList.contains('active');
+
+        if (isDailyTabActive) {
+            if (document.getElementById('sw_project')) document.getElementById('sw_project').value = "";
+            if (document.getElementById('sw_reminder')) document.getElementById('sw_reminder').value = "";
+            if (document.getElementById('sw_vip')) document.getElementById('sw_vip').value = "";
+            if (document.getElementById('sw_preference')) document.getElementById('sw_preference').value = "";
+
+            dailyInfo = { project: "", reminder: "", vip: "", preference: "" };
+            localStorage.removeItem("dailyInfo");
+        } else {
+            let stayVal = 0.8, depVal = 1, backVal = 1, pickVal = 0.4, raVal = 14, dwVal = 11, traineeVal = 5, maxStayVal = 6, spvVal = 17;
+            
+            if (typeof MANNING_RULES !== "undefined") {
+                stayVal = MANNING_RULES.credits.stayover;
+                depVal = MANNING_RULES.credits.departure;
+                backVal = MANNING_RULES.credits.dropped;
+                pickVal = MANNING_RULES.credits.pickup;
+                raVal = MANNING_RULES.targetCreditPerRA;
+                dwVal = MANNING_RULES.creditDW || 11;
+                traineeVal = MANNING_RULES.creditTrainee || 5;
+                spvVal = MANNING_RULES.targetArrivalPerSupervisor || 17;
+            }
+
+            if (document.getElementById('sw_stay')) document.getElementById('sw_stay').value = stayVal;
+            if (document.getElementById('sw_dep')) document.getElementById('sw_dep').value = depVal;
+            if (document.getElementById('sw_back')) document.getElementById('sw_back').value = backVal;
+            if (document.getElementById('sw_pick')) document.getElementById('sw_pick').value = pickVal;
+            if (document.getElementById('sw_creditRA')) document.getElementById('sw_creditRA').value = raVal;
+            if (document.getElementById('sw_creditDW')) document.getElementById('sw_creditDW').value = dwVal;
+            if (document.getElementById('sw_creditTrainee')) document.getElementById('sw_creditTrainee').value = traineeVal;
+            if (document.getElementById('sw_maxStayRooms')) document.getElementById('sw_maxStayRooms').value = maxStayVal;
+            if (document.getElementById('sw_spv')) document.getElementById('sw_spv').value = spvVal;
+
+            raCustomNames = {};
+            localStorage.removeItem("raCustomNames");
+            let raNeeded = Number(document.getElementById("requiredRA")?.innerText) || 10;
+            for (let i = 1; i <= raNeeded; i++) {
+                let el = document.getElementById(`sw_ra_name_${i}`);
+                if (el) el.value = "";
+            }
+        }
+    }
+
     window.saveSettingsModal = function() {
         let raNeeded = Number(document.getElementById("requiredRA")?.innerText) || 10;
         let tempNames = {};
@@ -571,6 +681,9 @@
         raCustomNames = tempNames;
         localStorage.setItem("raCustomNames", JSON.stringify(raCustomNames));
 
+        maxStayoverRooms = Number(document.getElementById('sw_maxStayRooms')?.value) || 0;
+        localStorage.setItem("maxStayoverRooms", maxStayoverRooms);
+
         dailyInfo = {
             project: document.getElementById('sw_project')?.value || "",
             reminder: document.getElementById('sw_reminder')?.value || "",
@@ -579,17 +692,18 @@
         };
         localStorage.setItem("dailyInfo", JSON.stringify(dailyInfo));
 
-        document.getElementById('stayCredit').value = document.getElementById('sw_stay')?.value || 1.0;
-        document.getElementById('depCredit').value = document.getElementById('sw_dep')?.value || 1.0;
-        document.getElementById('backCredit').value = document.getElementById('sw_back')?.value || 1.0;
+        document.getElementById('stayCredit').value = document.getElementById('sw_stay')?.value || 0.8;
+        document.getElementById('depCredit').value = document.getElementById('sw_dep')?.value || 1;
+        document.getElementById('backCredit').value = document.getElementById('sw_back')?.value || 1;
         document.getElementById('pickCredit').value = document.getElementById('sw_pick')?.value || 0.4;
         document.getElementById('creditRA').value = document.getElementById('sw_creditRA')?.value || 14;
         document.getElementById('creditDW').value = document.getElementById('sw_creditDW')?.value || 11;
+        document.getElementById('creditTrainee').value = document.getElementById('sw_creditTrainee')?.value || 5;
         document.getElementById('spvGoal').value = document.getElementById('sw_spv')?.value || 17;
 
         calculate();
         Swal.close();
-        Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Pengaturan berhasil diperbarui.', timer: 1500, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: 'Saved!', text: 'Settings updated successfully.', timer: 1500, showConfirmButton: false });
     }
 
     function openSettingsModal() {
@@ -602,7 +716,7 @@
             raInputsHTML += `
                 <div style="display:flex; align-items:center; gap:4px;">
                     <span style="font-size:11px; font-weight:bold; width:35px; color:#475569;">RA${i}:</span>
-                    <input id="sw_ra_name_${i}" type="text" class="swal2-input swal-ra-input" value="${existingName}" placeholder="Nama Staff ${i}">
+                    <input id="sw_ra_name_${i}" type="text" class="swal2-input swal-ra-input" value="${existingName}" placeholder="Staff Name ${i}">
                 </div>
             `;
         }
@@ -624,12 +738,13 @@
 
                 <div class="swal-tab-body">
                     <div id="sw_tab_content_general" class="swal-tab-content active">
-                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> NAMA STAFF (RA)</h4>
+                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
+                        <p style="font-size:11px; color:#64748b; margin-bottom:6px;">Enter staff names to replace labels RA1, RA2, etc.:</p>
                         <div class="swal-ra-grid" id="swalRaGrid">
                             ${raInputsHTML}
                         </div>
 
-                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-weight-hanging"></i> WEIGHT & TARGET</h4>
+                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-weight-hanging"></i> WEIGHT & TARGET SETTINGS</h4>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                             <div>
                                 <label><b>Stayover Weight:</b></label>
@@ -640,7 +755,7 @@
                                 <input id="sw_dep" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('depCredit').value}" step="0.01">
                             </div>
                             <div>
-                                <label><b>Dropped Weight:</b></label>
+                                <label><b>Dropped Room Weight:</b></label>
                                 <input id="sw_back" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('backCredit').value}" step="0.01">
                             </div>
                             <div>
@@ -648,12 +763,28 @@
                                 <input id="sw_pick" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('pickCredit').value}" step="0.01">
                             </div>
                             <div>
-                                <label><b>Credit RA Target:</b></label>
+                                <label><b>Credit / RA Capacity:</b></label>
                                 <input id="sw_creditRA" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRA').value}" step="0.1">
                             </div>
                             <div>
-                                <label><b>Credit DW Target:</b></label>
+                                <label><b>Credit DW:</b></label>
                                 <input id="sw_creditDW" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditDW').value}" step="0.1">
+                            </div>
+                            <div>
+                                <label><b>Credit Trainee:</b></label>
+                                <input id="sw_creditTrainee" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditTrainee').value}" step="0.1">
+                            </div>
+                        </div>
+
+                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-chart-pie"></i> ALLOCATION RULES</h4>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                            <div>
+                                <label><b>Max Stayover Room:</b></label>
+                                <input id="sw_maxStayRooms" type="number" class="swal2-input swal-ra-input" value="${maxStayoverRooms}" min="0" placeholder="e.g. 6">
+                            </div>
+                            <div>
+                                <label><b>Supervisor Goal:</b></label>
+                                <input id="sw_spv" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('spvGoal').value}">
                             </div>
                         </div>
                     </div>
@@ -662,19 +793,19 @@
                         <div style="display:flex; flex-direction:column; gap:8px;">
                             <div>
                                 <label><b>Project of the Day:</b></label>
-                                <textarea id="sw_project" class="swal-textarea" placeholder="Project hari ini...">${dailyInfo.project || ''}</textarea>
+                                <textarea id="sw_project" class="swal-textarea" placeholder="Input Project of the day...">${dailyInfo.project || ''}</textarea>
                             </div>
                             <div>
                                 <label><b>Reminder of the Day:</b></label>
-                                <textarea id="sw_reminder" class="swal-textarea" placeholder="Reminder hari ini...">${dailyInfo.reminder || ''}</textarea>
+                                <textarea id="sw_reminder" class="swal-textarea" placeholder="Input Reminder of the day...">${dailyInfo.reminder || ''}</textarea>
                             </div>
                             <div>
                                 <label><b>VIP in House:</b></label>
-                                <textarea id="sw_vip" class="swal-textarea" placeholder="Daftar VIP...">${dailyInfo.vip || ''}</textarea>
+                                <textarea id="sw_vip" class="swal-textarea" placeholder="Input VIP in House...">${dailyInfo.vip || ''}</textarea>
                             </div>
                             <div>
                                 <label><b>Guest Preferences:</b></label>
-                                <textarea id="sw_preference" class="swal-textarea" placeholder="Preferensi tamu...">${dailyInfo.preference || ''}</textarea>
+                                <textarea id="sw_preference" class="swal-textarea" placeholder="Input Guest Preferences...">${dailyInfo.preference || ''}</textarea>
                             </div>
                         </div>
                     </div>
@@ -684,16 +815,52 @@
                     <button type="button" class="btn-swal-action btn-swal-save" onclick="saveSettingsModal()">
                         <i class="fa-solid fa-check"></i> Save
                     </button>
+                    <button type="button" class="btn-swal-action btn-swal-reset" onclick="resetGeneralTabDefaults()">
+                        Reset
+                    </button>
                     <button type="button" class="btn-swal-action btn-swal-cancel" onclick="Swal.close()">
                         <i class="fa-solid fa-xmark"></i> Cancel
                     </button>
                 </div>
-            `
+            `,
+            didOpen: () => {
+                const raGrid = document.getElementById('swalRaGrid');
+                if (raGrid) {
+                    raGrid.addEventListener('touchmove', (e) => {
+                        e.stopPropagation();
+                    }, { passive: true });
+                }
+            }
         });
     }
 
+    function fetchLastSubmittedFromSheet() {
+        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("GANTI_DENGAN")) return;
+
+        fetch(GOOGLE_SCRIPT_URL)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    if (data.lastSubmitTime && data.lastSubmitTime !== "-") {
+                        document.getElementById("lastSubmitTime").innerText = data.lastSubmitTime;
+                        localStorage.setItem("lastSubmitTime", data.lastSubmitTime);
+                    }
+                    if (data.lastSubmitPlanner) {
+                        document.getElementById("lastSubmitPlanner").innerText = data.lastSubmitPlanner;
+                        localStorage.setItem("lastSubmitPlanner", data.lastSubmitPlanner);
+                    }
+                }
+            })
+            .catch(() => {
+                const savedTime = localStorage.getItem("lastSubmitTime");
+                const savedPlanner = localStorage.getItem("lastSubmitPlanner");
+                if (savedTime) document.getElementById("lastSubmitTime").innerText = savedTime;
+                if (savedPlanner) document.getElementById("lastSubmitPlanner").innerText = savedPlanner;
+            });
+    }
+
     const inputs = document.querySelectorAll(
-        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #stayCredit, #depCredit, #backCredit, #pickCredit, #creditRA, #creditDW, #dwCount, #spvGoal"
+        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #stayCredit, #depCredit, #backCredit, #pickCredit, #creditRA, #creditDW, #creditTrainee, #spvGoal"
     );
 
     inputs.forEach(input => {
@@ -701,14 +868,26 @@
     });
 
     document.addEventListener("DOMContentLoaded", function() {
-        loadSavedSettings();
+        loadRulesToUI();
         calculate();
+        fetchLastSubmittedFromSheet();
     });
 
     function calculate() {
         let tonightOccInput = document.getElementById("tonightOcc");
         let rawOcc = tonightOccInput?.value;
         let tonightOcc = Number(rawOcc) || 0;
+
+        if (rawOcc !== "" && (tonightOcc < 1 || tonightOcc > DEFAULT_CAPACITY)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Input',
+                text: `Room Sold must be between 1 and ${DEFAULT_CAPACITY} rooms.`,
+                confirmButtonColor: '#0284c7'
+            });
+            tonightOccInput.value = "";
+            tonightOcc = 0;
+        }
 
         let occPerc = tonightOcc > 0 ? ((tonightOcc / DEFAULT_CAPACITY) * 100).toFixed(1) : 0;
         document.getElementById("roomOccPerc").value = occPerc + "%";
@@ -717,15 +896,16 @@
         let departure = Number(document.getElementById("departure")?.value) || 0;
         let backlog = Number(document.getElementById("backlog")?.value) || 0;
         let pickup = Number(document.getElementById("pickup")?.value) || 0;
+        let turndown = Number(document.getElementById("turndown")?.value) || 0;
 
-        let stayCreditWeight = Number(document.getElementById("stayCredit")?.value) || 1.0;
-        let depCreditWeight = Number(document.getElementById("depCredit")?.value) || 1.0;
-        let backCreditWeight = Number(document.getElementById("backCredit")?.value) || 1.0;
-        let pickCreditWeight = Number(document.getElementById("pickCredit")?.value) || 0.4;
+        let stayCredit = Number(document.getElementById("stayCredit")?.value) || 0;
+        let depCredit = Number(document.getElementById("depCredit")?.value) || 0;
+        let backCredit = Number(document.getElementById("backCredit")?.value) || 0;
+        let pickCredit = Number(document.getElementById("pickCredit")?.value) || 0;
 
         let creditRA = Number(document.getElementById("creditRA")?.value) || 14;
         let creditDW = Number(document.getElementById("creditDW")?.value) || 11;
-        let dwCount = Number(document.getElementById("dwCount")?.value) || 0;
+        let creditTrainee = Number(document.getElementById("creditTrainee")?.value) || 5;
         let spvGoal = Number(document.getElementById("spvGoal")?.value) || 17;
 
         let stayover = tonightOcc - departure;
@@ -736,179 +916,203 @@
         document.getElementById("backQty").value = backlog;
         document.getElementById("pickQty").value = pickup;
 
-        let stayTotal = stayover * stayCreditWeight;
-        let depTotal = departure * depCreditWeight;
-        let backTotal = backlog * backCreditWeight;
-        let pickTotal = pickup * pickCreditWeight;
+        let stayTotal = stayover * stayCredit;
+        let depTotal = departure * depCredit;
+        let backTotal = backlog * backCredit;
+        let pickTotal = pickup * pickCredit;
 
         document.getElementById("stayTotal").innerText = stayTotal.toFixed(1);
         document.getElementById("depTotal").innerText = depTotal.toFixed(1);
         document.getElementById("backTotal").innerText = backTotal.toFixed(1);
         document.getElementById("pickTotal").innerText = pickTotal.toFixed(1);
 
-        let totalCleaningCredit = stayTotal + depTotal + backTotal + pickTotal;
-        document.getElementById("totalCleaning").innerText = totalCleaningCredit.toFixed(1);
+        let total = stayTotal + depTotal + backTotal + pickTotal;
+        document.getElementById("totalCleaning").innerText = total.toFixed(1);
 
-        // Required RA
-        let raNeeded = creditRA > 0 ? Math.ceil(totalCleaningCredit / creditRA) : 0;
+        let raNeeded = creditRA > 0 ? Math.ceil(total / creditRA) : 0;
         document.getElementById("requiredRA").innerText = raNeeded;
 
-        // Required Supervisor
         let spvNeeded = 0;
         if (arrival > 0 && spvGoal > 0) {
             let rawSpv = arrival / spvGoal;
-            spvNeeded = (rawSpv - Math.floor(rawSpv)) >= 0.40 ? Math.ceil(rawSpv) : Math.floor(rawSpv);
+            let integerPart = Math.floor(rawSpv);
+            let decimalPart = rawSpv - integerPart;
+
+            if (decimalPart >= 0.40) {
+                spvNeeded = Math.ceil(rawSpv);
+            } else {
+                spvNeeded = Math.floor(rawSpv);
+            }
         }
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
-        // ALLOCATION LOGIC (10 SO + 4 DEP, LALU HABISKAN PER-STAFF BERURUTAN, TOP-UP SP)
-        generateDistribution(raNeeded, dwCount, {
-            stayover, departure, backlog, pickup
+        generateRADistribution(raNeeded, total, { creditRA, creditDW, creditTrainee }, {
+            stayover, departure, backlog, pickup, turndown
         }, {
-            creditRA, creditDW
-        }, totalCleaningCredit);
+            stayCredit, depCredit, backCredit, pickCredit
+        });
     }
 
-    function generateDistribution(raNeeded, dwCount, inventoryQty, targetCaps, totalCleaningCredit) {
+    function generateRADistribution(raNeeded, totalCredit, capacityMap, qtyMap, weightMap) {
         const listContainer = document.getElementById("raAllocationList");
         const printTableBody = document.getElementById("raPrintTableBody");
         const droppedBanner = document.getElementById("droppedRoomBanner");
 
+        if (!listContainer || !printTableBody) return;
         listContainer.innerHTML = "";
         printTableBody.innerHTML = "";
 
-        if (raNeeded <= 0 && dwCount <= 0) {
-            listContainer.innerHTML = `<div style="text-align:center; font-size:11px; color:#94a3b8; padding:8px;">Belum ada alokasi staff.</div>`;
-            printTableBody.innerHTML = `<tr><td colspan="5" class="center">Belum ada alokasi staff.</td></tr>`;
+        if (raNeeded <= 0 || totalCredit <= 0) {
+            listContainer.innerHTML = `<div style="text-align:center; font-size:11px; color:#94a3b8; padding:8px;">No task allocation yet.</div>`;
+            printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
             if (droppedBanner) droppedBanner.style.display = "none";
             return;
         }
 
-        // 1. Inisialisasi Pool Kamar
-        let inv = {
-            so: inventoryQty.stayover,
-            dep: inventoryQty.departure,
-            drop: inventoryQty.backlog,
-            pick: inventoryQty.pickup
+        let raAllocations = [];
+        for (let i = 0; i < raNeeded; i++) {
+            let id = i + 1;
+            let name = raCustomNames[id] ? raCustomNames[id] : `RA ${id}`;
+            let nameUpper = name.toUpperCase();
+
+            let targetCap = capacityMap.creditRA;
+            let allowStayover = true;
+
+            if (nameUpper.includes("DW")) {
+                targetCap = Math.min(capacityMap.creditDW, 12);
+                allowStayover = false;
+            } else if (nameUpper.includes("TRAINEE")) {
+                targetCap = Math.min(capacityMap.creditTrainee, 12);
+                allowStayover = false;
+            }
+
+            if (!allowStayover) {
+                targetCap = Math.min(targetCap, 12);
+            }
+
+            raAllocations.push({ 
+                id, 
+                name, 
+                targetCap, 
+                allowStayover, 
+                credit: 0, 
+                stayRoomsAssigned: 0, 
+                tasks: {} 
+            });
+        }
+
+        let remainingTasks = {
+            stayover: qtyMap.stayover,
+            departure: qtyMap.departure,
+            backlog: qtyMap.backlog,
+            pickup: qtyMap.pickup
         };
 
-        // 2. Susun Antrean Staff (RA dahulu, lalu DW)
-        let staffQueue = [];
-        for (let i = 1; i <= raNeeded; i++) {
-            let name = raCustomNames[i] ? raCustomNames[i] : `RA ${i}`;
-            staffQueue.push({ id: i, name: name, type: 'RA', target: targetCaps.creditRA });
+        const taskPriorityList = [
+            { key: "stayover", name: "Stayover", weight: weightMap.stayCredit, isStayover: true },
+            { key: "departure", name: "Departure", weight: weightMap.depCredit, isStayover: false },
+            { key: "backlog", name: "Dropped", weight: weightMap.backCredit, isStayover: false },
+            { key: "pickup", name: "Pick-up", weight: weightMap.pickCredit, isStayover: false }
+        ];
+
+        for (let i = 0; i < raNeeded; i++) {
+            let ra = raAllocations[i];
+
+            for (let task of taskPriorityList) {
+                if (task.isStayover && !ra.allowStayover) continue;
+
+                let availableQty = remainingTasks[task.key];
+                if (availableQty <= 0 || task.weight <= 0) continue;
+
+                let remainingGeneralCap = ra.targetCap - ra.credit;
+                if (remainingGeneralCap < task.weight - 0.0001) continue;
+
+                let maxRoomsAllowed = Math.floor((remainingGeneralCap + 0.0001) / task.weight);
+
+                if (task.isStayover && maxStayoverRooms > 0) {
+                    let roomCapLeft = maxStayoverRooms - ra.stayRoomsAssigned;
+                    if (roomCapLeft <= 0) continue;
+                    maxRoomsAllowed = Math.min(maxRoomsAllowed, roomCapLeft);
+                }
+
+                let roomsToAssign = Math.min(availableQty, maxRoomsAllowed);
+
+                if (roomsToAssign > 0) {
+                    remainingTasks[task.key] -= roomsToAssign;
+                    let taskTotalCredit = roomsToAssign * task.weight;
+                    
+                    ra.credit += taskTotalCredit;
+                    if (task.isStayover) ra.stayRoomsAssigned += roomsToAssign;
+
+                    ra.tasks[task.name] = (ra.tasks[task.name] || 0) + roomsToAssign;
+                }
+
+                if (ra.credit >= ra.targetCap) break;
+            }
         }
-        for (let j = 1; j <= dwCount; j++) {
-            staffQueue.push({ id: j, name: `DW ${j}`, type: 'DW', target: targetCaps.creditDW });
-        }
 
-        let totalPhysicalCreditAssigned = 0;
+        let totalAllocatedCredit = 0;
+        let displayedIndex = 0;
 
-        // 3. Proses Pembagian Per-Staff
-        staffQueue.forEach((staff, index) => {
-            let target = staff.target;
-            let assigned = { so: 0, dep: 0, drop: 0, pick: 0, sp: 0 };
+        raAllocations.forEach((ra) => {
+            if (ra.credit <= 0) return;
 
-            // A. Utamakan 10 Stayover (RA) atau Max Target (DW)
-            let idealSOLimit = (staff.type === 'RA') ? 10 : Math.min(8, target);
-            let soGiven = Math.min(inv.so, idealSOLimit);
-            assigned.so += soGiven;
-            inv.so -= soGiven;
+            displayedIndex++;
+            totalAllocatedCredit += ra.credit;
 
-            // B. Tambahkan Departure (Target ideal RA: 4 DEP)
-            let curr = assigned.so;
-            let needed = target - curr;
-            if (needed > 0 && inv.dep > 0) {
-                let depGiven = Math.min(inv.dep, needed);
-                assigned.dep += depGiven;
-                inv.dep -= depGiven;
+            let taskTextArr = [];
+            for (let [tName, tQty] of Object.entries(ra.tasks)) {
+                if (tQty > 0) taskTextArr.push(`${tQty} ${tName}`);
             }
 
-            // C. Jika Stayover masih sisa dan credit belum rata 14/11, ambil lagi Stayover
-            curr = assigned.so + assigned.dep;
-            needed = target - curr;
-            if (needed > 0 && inv.so > 0) {
-                let soExtra = Math.min(inv.so, needed);
-                assigned.so += soExtra;
-                inv.so -= soExtra;
+            let taskText = taskTextArr.length > 0 ? taskTextArr.join(" + ") : "General Assistance / Prep";
+            
+            let specialBadge = "";
+            let specialPrintText = "";
+            if (ra.credit < (ra.targetCap - 1.0)) {
+                let deficit = (ra.targetCap - ra.credit).toFixed(1);
+                specialBadge = `<div class="special-project-badge"><i class="fa-solid fa-screwdriver-wrench"></i> Credit ${ra.credit.toFixed(1)} (Less ${deficit}) Special Project / Deep Cleaning</div>`;
+                specialPrintText = ` | (Less ${deficit} - Special Project / Deep Cleaning)`;
             }
 
-            // D. Jika belum penuh, ambil Drop Room
-            curr = assigned.so + assigned.dep;
-            needed = target - curr;
-            if (needed > 0 && inv.drop > 0) {
-                let dropGiven = Math.min(inv.drop, needed);
-                assigned.drop += dropGiven;
-                inv.drop -= dropGiven;
-            }
-
-            // E. Jika belum penuh, ambil Pick-up (dengan bobot 0.4)
-            curr = assigned.so + assigned.dep + assigned.drop;
-            needed = target - curr;
-            if (needed > 0 && inv.pick > 0) {
-                let pickGiven = Math.min(inv.pick, Math.floor(needed / 0.4));
-                assigned.pick += pickGiven;
-                inv.pick -= pickGiven;
-            }
-
-            // F. Cek Top-up Special Project jika kamar fisik tidak cukup
-            let physicalCredit = assigned.so + assigned.dep + assigned.drop + (assigned.pick * 0.4);
-            if (physicalCredit < target) {
-                assigned.sp = target - physicalCredit;
-            }
-
-            totalPhysicalCreditAssigned += physicalCredit;
-
-            let finalTotalCredit = physicalCredit + assigned.sp;
-
-            // Render Teks Tugas
-            let taskParts = [];
-            if (assigned.so > 0) taskParts.push(`${assigned.so} Stayover`);
-            if (assigned.dep > 0) taskParts.push(`${assigned.dep} Departure`);
-            if (assigned.drop > 0) taskParts.push(`${assigned.drop} Dropped`);
-            if (assigned.pick > 0) taskParts.push(`${assigned.pick} Pick-up`);
-            let taskText = taskParts.length > 0 ? taskParts.join(" + ") : "General Support";
-
-            let spBadgeHTML = "";
-            let spPrintText = "";
-            if (assigned.sp > 0) {
-                spBadgeHTML = `<div class="special-project-badge"><i class="fa-solid fa-screwdriver-wrench"></i> +${assigned.sp.toFixed(1)} Special Project</div>`;
-                spPrintText = ` | (+${assigned.sp.toFixed(1)} Special Project)`;
-            }
-
-            // Append Card UI
             let raItem = document.createElement("div");
             raItem.className = "ra-item";
             raItem.innerHTML = `
                 <div class="ra-header">
-                    <span class="ra-name"><i class="fa-solid fa-user-check" style="color:#0284c7;"></i> ${staff.name} <small style="color:#64748b;">(${staff.type})</small></span>
-                    <span class="ra-credit-badge">${finalTotalCredit.toFixed(1)} / ${staff.target} Credit</span>
+                    <span class="ra-name"><i class="fa-solid fa-user-check" style="color:#0284c7;"></i> ${ra.name}</span>
+                    <span class="ra-credit-badge">${ra.credit.toFixed(1)} / ${ra.targetCap} Credit</span>
                 </div>
                 <div class="ra-details">
-                    <b>Task Allocation:</b> ${taskText}
-                    ${spBadgeHTML}
+                    <b>Role/Tasks:</b> ${taskText}
+                    ${specialBadge}
                 </div>
             `;
             listContainer.appendChild(raItem);
 
-            // Append Print Table Row
             let tr = document.createElement("tr");
             tr.innerHTML = `
-                <td class="center">${index + 1}</td>
-                <td class="bold">${staff.name}</td>
-                <td class="center">${staff.type}</td>
-                <td class="center">${finalTotalCredit.toFixed(1)}</td>
-                <td>${taskText}${spPrintText}</td>
+                <td class="center">${displayedIndex}</td>
+                <td class="bold">${ra.name}</td>
+                <td class="center">${ra.credit.toFixed(1)} / ${ra.targetCap}</td>
+                <td>${taskText}${specialPrintText}</td>
             `;
             printTableBody.appendChild(tr);
         });
 
-        // 4. Kalkulasi DROPPED ROOM TODAY
-        let droppedRoomToday = Math.max(0, totalCleaningCredit - totalPhysicalCreditAssigned);
+        if (displayedIndex === 0) {
+            listContainer.innerHTML = `<div style="text-align:center; font-size:11px; color:#94a3b8; padding:8px;">No task allocation yet.</div>`;
+            printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
+        }
 
-        if (droppedRoomToday > 0.05) {
-            document.getElementById("droppedCreditBadge").innerText = `${droppedRoomToday.toFixed(1)} Credit`;
-            document.getElementById("droppedDetailText").innerText = `Selisih beban kerja belum terkaver oleh RA/DW`;
+        /* LOGIKA HITUNG SISA KREDIT / DROPPED ROOM TODAY */
+        let unallocatedCredit = totalCredit - totalAllocatedCredit;
+        if (unallocatedCredit > 0.05) {
+            let droppedCreditFormatted = unallocatedCredit.toFixed(1);
+            let depWeight = weightMap.depCredit || 1;
+            let estRooms = (unallocatedCredit / depWeight).toFixed(1);
+
+            document.getElementById("droppedCreditBadge").innerText = `${droppedCreditFormatted} Credit`;
+            document.getElementById("droppedDetailText").innerText = `Selisih beban kerja (~${estRooms} Kamar) belum dialokasikan ke RA/DW/Trainee`;
             if (droppedBanner) droppedBanner.style.display = "flex";
         } else {
             if (droppedBanner) droppedBanner.style.display = "none";
@@ -917,9 +1121,10 @@
 
     function printDistribution() {
         const now = new Date();
-        document.getElementById("printDate").innerText = now.toLocaleDateString('id-ID', { 
+        const formattedDate = now.toLocaleDateString('en-US', { 
             weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
         });
+        document.getElementById("printDate").innerText = formattedDate;
 
         document.getElementById("printSoldVal").innerText = document.getElementById("tonightOcc")?.value || "0";
         document.getElementById("printArrivalVal").innerText = document.getElementById("arrival")?.value || "0";
@@ -936,30 +1141,85 @@
         window.print();
     }
 
+    function resetForm() {
+        const fieldsToReset = ["planBy", "tonightOcc", "arrival", "departure", "backlog", "pickup", "turndown"];
+        fieldsToReset.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = "";
+        });
+        calculate();
+    }
+
+    function validateInputs() {
+        const requiredIds = ["planBy", "tonightOcc", "arrival", "departure"];
+        for (let id of requiredIds) {
+            const el = document.getElementById(id);
+            if (!el || el.value.trim() === "") {
+                return { valid: false, field: id };
+            }
+        }
+        return { valid: true };
+    }
+
     function submitToGoogleSheet() {
-        const plannerInput = document.getElementById("planBy")?.value.trim();
-        if (!plannerInput) {
-            Swal.fire({ icon: 'error', title: 'Data Belum Lengkap', text: 'Isi Planner Name terlebih dahulu.' });
+        const checkValidation = validateInputs();
+        if (!checkValidation.valid) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Incomplete Input',
+                text: 'Please fill in Planner Name, Room Sold, Arrival, and Departure fields first.',
+                confirmButtonColor: '#0284c7'
+            });
             return;
         }
 
+        const tonightOcc = Number(document.getElementById("tonightOcc")?.value) || 0;
+        if (tonightOcc < 1 || tonightOcc > DEFAULT_CAPACITY) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Input',
+                text: `Room Sold must be between 1 and ${DEFAULT_CAPACITY}.`,
+                confirmButtonColor: '#0284c7'
+            });
+            return;
+        }
+
+        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("GANTI_DENGAN")) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Apps Script URL Missing',
+                text: 'Please check your GOOGLE_SCRIPT_URL variable.'
+            });
+            return;
+        }
+
+        const plannerInput = document.getElementById("planBy")?.value.trim() || "-";
         const btn = document.getElementById("submitBtn");
         btn.disabled = true;
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ARCHIVING...`;
 
+        const getValue = (id) => document.getElementById(id)?.value || "0";
+        const getText = (id) => document.getElementById(id)?.innerText || "0";
+
         const payload = {
-            tonightOcc: document.getElementById("tonightOcc")?.value || "0",
-            arrival: document.getElementById("arrival")?.value || "0",
-            departure: document.getElementById("departure")?.value || "0",
-            backlog: document.getElementById("backlog")?.value || "0",
-            pickup: document.getElementById("pickup")?.value || "0",
-            turndown: document.getElementById("turndown")?.value || "0",
-            totalCleaning: document.getElementById("totalCleaning")?.innerText || "0",
-            creditRA: document.getElementById("creditRA")?.value || "14",
-            creditDW: document.getElementById("creditDW")?.value || "11",
-            requiredRA: document.getElementById("requiredRA")?.innerText || "0",
-            requiredSpv: document.getElementById("requiredSpv")?.innerText || "0",
-            planBy: plannerInput
+            tonightOcc: getValue("tonightOcc"),
+            arrival: getValue("arrival"),
+            departure: getValue("departure"),
+            backlog: getValue("backlog"),
+            pickup: getValue("pickup"),
+            turndown: getValue("turndown"),
+            stayQty: getValue("stayQty"),
+            totalCleaning: getText("totalCleaning"),
+            creditRA: getValue("creditRA"),
+            creditDW: getValue("creditDW"),
+            creditTrainee: getValue("creditTrainee"),
+            requiredRA: getText("requiredRA"),
+            requiredSpv: getText("requiredSpv"),
+            planBy: plannerInput,
+            projectOfDay: dailyInfo.project || "",
+            reminderOfDay: dailyInfo.reminder || "",
+            vipInHouse: dailyInfo.vip || "",
+            guestPreference: dailyInfo.preference || ""
         };
 
         fetch(GOOGLE_SCRIPT_URL, {
@@ -969,14 +1229,34 @@
             body: JSON.stringify(payload)
         })
         .then(() => {
-            const timeString = new Date().toLocaleString('id-ID');
+            const now = new Date();
+            const timeString = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + 
+                               now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
             document.getElementById("lastSubmitTime").innerText = timeString;
             document.getElementById("lastSubmitPlanner").innerText = plannerInput;
 
-            Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Data berhasil di-archive!' });
+            localStorage.setItem("lastSubmitTime", timeString);
+            localStorage.setItem("lastSubmitPlanner", plannerInput);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Data successfully archived!',
+                confirmButtonColor: '#0284c7'
+            });
+
+            resetForm();
+            setTimeout(fetchLastSubmittedFromSheet, 2000);
         })
-        .catch(() => {
-            Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Terjadi kesalahan saat menyimpan.' });
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed!',
+                text: 'Failed to archive data. Please try again.',
+                confirmButtonColor: '#ef4444'
+            });
         })
         .finally(() => {
             btn.disabled = false;
