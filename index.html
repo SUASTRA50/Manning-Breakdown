@@ -353,40 +353,7 @@
             .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
             .print-daily-item b { display: block; text-transform: uppercase; margin-bottom: 2px; font-size: 8px; }
         }
-        /* Highlight area kuning sesuai mockup */
-.input-group.highlight-yellow {
-  background-color: #fffde7;
-  border-left: 4px solid #fbc02d;
-  padding: 6px 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
-.role-credits-card .input-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.role-credits-card input.form-control {
-  width: 70px;
-  text-align: center;
-  font-weight: bold;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  padding: 6px;
-}
-
-.btn-advanced {
-  background-color: #e0f2fe;
-  color: #0284c7;
-  border: 1px solid #bae6fd;
-  border-radius: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-size: 13px;
-}
+        
     </style>
 </head>
 
@@ -702,73 +669,7 @@
         </div>
     </div>
 </div>
-    <!-- Modal / Panel Setting Role -->
-<div class="role-credits-card">
-  <div class="card-header">
-    <h3><i class="fas fa-cog"></i> SETTING ROLE</h3>
-    <button type="button" class="btn-advanced" onclick="toggleAdvancedModal()">
-      <i class="fas fa-sliders-h"></i> Advanced
-    </button>
-  </div>
-
-  <div class="card-body">
-    <!-- Standard Input Fields -->
-    <div class="input-group">
-      <label for="creditRaCapacity">Credit / RA Capacity</label>
-      <input type="number" id="creditRaCapacity" class="form-control" value="13" onchange="calculateDistribution()">
-    </div>
-
-    <!-- Tambahan Input Warna Kuning -->
-    <div class="input-group highlight-yellow">
-      <label for="creditRaDw">Credit RA + DW</label>
-      <input type="number" id="creditRaDw" class="form-control" value="15" onchange="calculateDistribution()">
-    </div>
-
-    <div class="input-group highlight-yellow">
-      <label for="creditRaTrainee">Credit RA + Trainee</label>
-      <input type="number" id="creditRaTrainee" class="form-control" value="16" onchange="calculateDistribution()">
-    </div>
-
-    <div class="input-group">
-      <label for="creditDw">Credit DW</label>
-      <input type="number" id="creditDw" class="form-control" value="11" onchange="calculateDistribution()">
-    </div>
-
-    <div class="input-group">
-      <label for="creditTrainee">Credit Trainee</label>
-      <input type="number" id="creditTrainee" class="form-control" value="3" onchange="calculateDistribution()">
-    </div>
-
-    <div class="input-group">
-      <label for="supervisorGoal">Supervisor Goal</label>
-      <input type="number" id="supervisorGoal" class="form-control" value="17" onchange="calculateDistribution()">
-    </div>
-  </div>
-</div>
-
-<!-- Modal / Section Advanced Settings -->
-<div id="advancedSettingsModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close-btn" onclick="toggleAdvancedModal()">&times;</span>
-    <h3><i class="fas fa-sliders-h"></i> Advanced Settings</h3>
-    <hr>
     
-    <div class="advanced-section">
-      <h4>Allocation Role & Max Stay Over</h4>
-      
-      <div class="input-group">
-        <label for="maxStayOverRaDw">Max stay over for RA + DW</label>
-        <input type="number" id="maxStayOverRaDw" class="form-control" placeholder="Input max stay over for RA + DW" onchange="calculateDistribution()">
-      </div>
-
-      <div class="input-group">
-        <label for="maxStayOverRaTrainee">Max stay over for RA + Trainee</label>
-        <input type="number" id="maxStayOverRaTrainee" class="form-control" placeholder="Input max stay over for RA + Trainee" onchange="calculateDistribution()">
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTNP0B2MDQv4SWKbXAJYmtXsnSjTYOebzK6irnSzgrtAsDXZ9GnZrXvP2ZJepsCZva/exec";
 
