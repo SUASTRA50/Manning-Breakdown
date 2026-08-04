@@ -184,6 +184,15 @@
         .total-badge { font-size: 16px; font-weight: bold; color: #0284c7; }
         .credit-box { width: 65px; font-weight: bold; }
 
+        /* HIGHLIGHT KUNING AREA UNTUK RA+DW DAN RA+TRAINEE */
+        .highlight-yellow {
+            background-color: #fffde7;
+            border-left: 4px solid #fbc02d;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
         /* COMBINED STAFF SUMMARY CARD */
         .staff-summary-combined { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #ffffff; border-radius: 12px; padding: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 12px; border: 1px solid #cbd5e1; }
         .staff-item-box { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
@@ -353,7 +362,6 @@
             .print-daily-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
             .print-daily-item b { display: block; text-transform: uppercase; margin-bottom: 2px; font-size: 8px; }
         }
-        
     </style>
 </head>
 
@@ -482,6 +490,17 @@
                     <div class="summary">
                         <label for="creditRA">Credit / RA Capacity</label>
                         <input id="creditRA" type="number" class="credit-box" value="14">
+                    </div>
+
+                    <!-- AREA WARNA KUNING: RA+DW & RA+TRAINEE -->
+                    <div class="summary highlight-yellow">
+                        <label for="creditRaDw">Credit RA + DW</label>
+                        <input id="creditRaDw" type="number" class="credit-box" value="15">
+                    </div>
+
+                    <div class="summary highlight-yellow">
+                        <label for="creditRaTrainee">Credit RA + Trainee</label>
+                        <input id="creditRaTrainee" type="number" class="credit-box" value="16">
                     </div>
 
                     <div class="summary">
@@ -669,12 +688,14 @@
         </div>
     </div>
 </div>
-    
+
 <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTNP0B2MDQv4SWKbXAJYmtXsnSjTYOebzK6irnSzgrtAsDXZ9GnZrXvP2ZJepsCZva/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0EOOMwRPMwuAAE3LHH8EbJkR9U-tin4_EMX10q8yRnTEK1o13dO329y6PEYNs8L7F/exec";
 
     let raCustomNames = {};
     let maxStayoverRooms = 6; 
+    let maxStayOverRaDw = 0;
+    let maxStayOverRaTrainee = 0;
     let defaultCapacity = 272;
 
     let dailyInfo = {
@@ -743,7 +764,6 @@
         });
         document.getElementById("printDate").innerText = formattedDate;
 
-        // Ambil input nama Planner dari form
         const plannerInput = document.getElementById("planBy")?.value.trim();
         document.getElementById("printPlanner").innerText = `Planner: ${plannerInput || '-'}`;
 
@@ -759,14 +779,12 @@
         document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
         document.getElementById("printPrefVal").innerText = dailyInfo.preference?.trim() ? dailyInfo.preference : "-";
 
-        // Ubah Judul Dokumen Sementara Untuk Default Filename PDF
         const originalTitle = document.title;
         const timestamp = getFormattedTimestamp();
         document.title = `HK WORKLOAD PLANNER - ${timestamp}`;
 
         window.print();
 
-        // Kembalikan Judul Dokumen
         setTimeout(() => {
             document.title = originalTitle;
         }, 1000);
@@ -812,9 +830,13 @@
         }
 
         const savedMaxStayRooms = localStorage.getItem("maxStayoverRooms");
-        if (savedMaxStayRooms !== null) {
-            maxStayoverRooms = Number(savedMaxStayRooms);
-        }
+        if (savedMaxStayRooms !== null) maxStayoverRooms = Number(savedMaxStayRooms);
+
+        const savedMaxStayDw = localStorage.getItem("maxStayOverRaDw");
+        if (savedMaxStayDw !== null) maxStayOverRaDw = Number(savedMaxStayDw);
+
+        const savedMaxStayTrainee = localStorage.getItem("maxStayOverRaTrainee");
+        if (savedMaxStayTrainee !== null) maxStayOverRaTrainee = Number(savedMaxStayTrainee);
 
         const savedDailyInfo = localStorage.getItem("dailyInfo");
         if (savedDailyInfo) {
@@ -861,9 +883,13 @@
             if (document.getElementById('sw_back')) document.getElementById('sw_back').value = backVal;
             if (document.getElementById('sw_pick')) document.getElementById('sw_pick').value = pickVal;
             if (document.getElementById('sw_creditRA')) document.getElementById('sw_creditRA').value = raVal;
+            if (document.getElementById('sw_creditRaDw')) document.getElementById('sw_creditRaDw').value = 15;
+            if (document.getElementById('sw_creditRaTrainee')) document.getElementById('sw_creditRaTrainee').value = 16;
             if (document.getElementById('sw_creditDW')) document.getElementById('sw_creditDW').value = dwVal;
             if (document.getElementById('sw_creditTrainee')) document.getElementById('sw_creditTrainee').value = traineeVal;
             if (document.getElementById('sw_maxStayRooms')) document.getElementById('sw_maxStayRooms').value = maxStayVal;
+            if (document.getElementById('sw_maxStayOverRaDw')) document.getElementById('sw_maxStayOverRaDw').value = "";
+            if (document.getElementById('sw_maxStayOverRaTrainee')) document.getElementById('sw_maxStayOverRaTrainee').value = "";
             if (document.getElementById('sw_spv')) document.getElementById('sw_spv').value = spvVal;
 
             raCustomNames = {};
@@ -890,6 +916,12 @@
         maxStayoverRooms = Number(document.getElementById('sw_maxStayRooms')?.value) || 0;
         localStorage.setItem("maxStayoverRooms", maxStayoverRooms);
 
+        maxStayOverRaDw = Number(document.getElementById('sw_maxStayOverRaDw')?.value) || 0;
+        localStorage.setItem("maxStayOverRaDw", maxStayOverRaDw);
+
+        maxStayOverRaTrainee = Number(document.getElementById('sw_maxStayOverRaTrainee')?.value) || 0;
+        localStorage.setItem("maxStayOverRaTrainee", maxStayOverRaTrainee);
+
         dailyInfo = {
             project: document.getElementById('sw_project')?.value || "",
             reminder: document.getElementById('sw_reminder')?.value || "",
@@ -903,6 +935,8 @@
         document.getElementById('backCredit').value = document.getElementById('sw_back')?.value || 1;
         document.getElementById('pickCredit').value = document.getElementById('sw_pick')?.value || 0.4;
         document.getElementById('creditRA').value = document.getElementById('sw_creditRA')?.value || 14;
+        document.getElementById('creditRaDw').value = document.getElementById('sw_creditRaDw')?.value || 15;
+        document.getElementById('creditRaTrainee').value = document.getElementById('sw_creditRaTrainee')?.value || 16;
         document.getElementById('creditDW').value = document.getElementById('sw_creditDW')?.value || 11;
         document.getElementById('creditTrainee').value = document.getElementById('sw_creditTrainee')?.value || 5;
         document.getElementById('spvGoal').value = document.getElementById('sw_spv')?.value || 17;
@@ -973,6 +1007,14 @@
                                 <input id="sw_creditRA" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRA').value}" step="0.1">
                             </div>
                             <div>
+                                <label><b>Credit RA + DW:</b></label>
+                                <input id="sw_creditRaDw" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRaDw').value}" step="0.1">
+                            </div>
+                            <div>
+                                <label><b>Credit RA + Trainee:</b></label>
+                                <input id="sw_creditRaTrainee" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRaTrainee').value}" step="0.1">
+                            </div>
+                            <div>
                                 <label><b>Credit DW:</b></label>
                                 <input id="sw_creditDW" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditDW').value}" step="0.1">
                             </div>
@@ -982,11 +1024,19 @@
                             </div>
                         </div>
 
-                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-chart-pie"></i> ALLOCATION RULES</h4>
+                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-chart-pie"></i> ALLOCATION ROLES & MAX STAYOVER</h4>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                             <div>
                                 <label><b>Max Stayover Room:</b></label>
                                 <input id="sw_maxStayRooms" type="number" class="swal2-input swal-ra-input" value="${maxStayoverRooms}" min="0" placeholder="e.g. 6">
+                            </div>
+                            <div>
+                                <label><b>Max Stayover (RA + DW):</b></label>
+                                <input id="sw_maxStayOverRaDw" type="number" class="swal2-input swal-ra-input" value="${maxStayOverRaDw || ''}" min="0" placeholder="Max stay over for RA + DW">
+                            </div>
+                            <div>
+                                <label><b>Max Stayover (RA + Trainee):</b></label>
+                                <input id="sw_maxStayOverRaTrainee" type="number" class="swal2-input swal-ra-input" value="${maxStayOverRaTrainee || ''}" min="0" placeholder="Max stay over for RA + Trainee">
                             </div>
                             <div>
                                 <label><b>Supervisor Goal:</b></label>
@@ -1066,7 +1116,7 @@
     }
 
     const inputs = document.querySelectorAll(
-        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #stayCredit, #depCredit, #backCredit, #pickCredit, #creditRA, #creditDW, #creditTrainee, #spvGoal"
+        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #stayCredit, #depCredit, #backCredit, #pickCredit, #creditRA, #creditRaDw, #creditRaTrainee, #creditDW, #creditTrainee, #spvGoal"
     );
 
     inputs.forEach(input => {
@@ -1110,6 +1160,8 @@
         let pickCredit = Number(document.getElementById("pickCredit")?.value) || 0;
 
         let creditRA = Number(document.getElementById("creditRA")?.value) || 14;
+        let creditRaDw = Number(document.getElementById("creditRaDw")?.value) || 15;
+        let creditRaTrainee = Number(document.getElementById("creditRaTrainee")?.value) || 16;
         let creditDW = Number(document.getElementById("creditDW")?.value) || 11;
         let creditTrainee = Number(document.getElementById("creditTrainee")?.value) || 5;
         let spvGoal = Number(document.getElementById("spvGoal")?.value) || 17;
@@ -1152,7 +1204,7 @@
         }
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
-        generateRADistribution(raNeeded, total, { creditRA, creditDW, creditTrainee }, {
+        generateRADistribution(raNeeded, total, { creditRA, creditRaDw, creditRaTrainee, creditDW, creditTrainee }, {
             stayover, departure, backlog, pickup, turndown
         }, {
             stayCredit, depCredit, backCredit, pickCredit
@@ -1183,17 +1235,21 @@
 
             let targetCap = capacityMap.creditRA;
             let allowStayover = true;
+            let customMaxStay = maxStayoverRooms;
 
-            if (nameUpper.includes("DW")) {
+            // LOGIKA FILTER NAMA (RA + DW / RA + TRAINEE)
+            if (nameUpper.includes("+ DW") || nameUpper.includes("+DW")) {
+                targetCap = capacityMap.creditRaDw;
+                if (maxStayOverRaDw > 0) customMaxStay = maxStayOverRaDw;
+            } else if (nameUpper.includes("+ TRAINEE") || nameUpper.includes("+TRAINEE")) {
+                targetCap = capacityMap.creditRaTrainee;
+                if (maxStayOverRaTrainee > 0) customMaxStay = maxStayOverRaTrainee;
+            } else if (nameUpper.startsWith("DW")) {
                 targetCap = Math.min(capacityMap.creditDW, 12);
                 allowStayover = false;
-            } else if (nameUpper.includes("TRAINEE")) {
+            } else if (nameUpper.startsWith("TRAINEE")) {
                 targetCap = Math.min(capacityMap.creditTrainee, 12);
                 allowStayover = false;
-            }
-
-            if (!allowStayover) {
-                targetCap = Math.min(targetCap, 12);
             }
 
             raAllocations.push({ 
@@ -1201,6 +1257,7 @@
                 name, 
                 targetCap, 
                 allowStayover, 
+                customMaxStay,
                 credit: 0, 
                 stayRoomsAssigned: 0, 
                 tasks: {} 
@@ -1235,8 +1292,8 @@
 
                 let maxRoomsAllowed = Math.floor((remainingGeneralCap + 0.0001) / task.weight);
 
-                if (task.isStayover && maxStayoverRooms > 0) {
-                    let roomCapLeft = maxStayoverRooms - ra.stayRoomsAssigned;
+                if (task.isStayover && ra.customMaxStay > 0) {
+                    let roomCapLeft = ra.customMaxStay - ra.stayRoomsAssigned;
                     if (roomCapLeft <= 0) continue;
                     maxRoomsAllowed = Math.min(maxRoomsAllowed, roomCapLeft);
                 }
@@ -1395,6 +1452,8 @@
             stayQty: getValue("stayQty"),
             totalCleaning: getText("totalCleaning"),
             creditRA: getValue("creditRA"),
+            creditRaDw: getValue("creditRaDw"),
+            creditRaTrainee: getValue("creditRaTrainee"),
             creditDW: getValue("creditDW"),
             creditTrainee: getValue("creditTrainee"),
             requiredRA: getText("requiredRA"),
@@ -1447,63 +1506,7 @@
             btn.innerHTML = `<i class="fa-solid fa-box-archive"></i> ARCHIVE`;
         });
     }
-     // Toggle Modal Advanced
-function toggleAdvancedModal() {
-  const modal = document.getElementById('advancedSettingsModal');
-  modal.style.display = (modal.style.display === 'none' || modal.style.display === '') ? 'block' : 'none';
-}
-
-// Logika Utama Evaluasi Kapasitas Kredit per RA
-function getCapacityForStaff(staffName) {
-  const nameUpper = staffName.toUpperCase();
-
-  // 1. Cek Apakah Ada Tanda "+ DW" / "+DW"
-  if (nameUpper.includes('+ DW') || nameUpper.includes('+DW')) {
-    return parseFloat(document.getElementById('creditRaDw').value) || 0;
-  }
-  
-  // 2. Cek Apakah Ada Tanda "+ TRAINEE" / "+TRAINEE"
-  if (nameUpper.includes('+ TRAINEE') || nameUpper.includes('+TRAINEE')) {
-    return parseFloat(document.getElementById('creditRaTrainee').value) || 0;
-  }
-  
-  // 3. Fallback Standard DW & Trainee biasa
-  if (nameUpper.startsWith('DW')) {
-    return parseFloat(document.getElementById('creditDw').value) || 0;
-  }
-  
-  if (nameUpper.startsWith('TRAINEE')) {
-    return parseFloat(document.getElementById('creditTrainee').value) || 0;
-  }
-
-  // 4. Default RA Capacity
-  return parseFloat(document.getElementById('creditRaCapacity').value) || 0;
-}
-
-// Contoh Integrasi ke Fungsi Room Distribution
-function calculateDistribution() {
-  // Misal mengambil array data RA dari form/tabel
-  const raList = document.querySelectorAll('.ra-input-row');
-
-  raList.forEach((row) => {
-    const nameInput = row.querySelector('.ra-name-input').value;
-    const targetCapacity = getCapacityForStaff(nameInput);
-    
-    // Set Max Stayover Jika Ada Parameter Khusus
-    let maxStayOver = null;
-    if (nameInput.toUpperCase().includes('+ DW')) {
-      maxStayOver = parseFloat(document.getElementById('maxStayOverRaDw').value);
-    } else if (nameInput.toUpperCase().includes('+ TRAINEE')) {
-      maxStayOver = parseFloat(document.getElementById('maxStayOverRaTrainee').value);
-    }
-
-    // Jalankan kalkulasi pembagian kamar berbasis targetCapacity dan maxStayOver
-    // ... (Logika pembagian room list Anda)
-    row.querySelector('.target-credit-display').innerText = targetCapacity;
-  });
-}
 </script>
-   
 
 </body>
 </html>
