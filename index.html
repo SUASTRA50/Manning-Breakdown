@@ -339,8 +339,8 @@
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
 
+            /* PERBAIKAN CSS PRINT: Menghapus display: flex !important agar mematuhi style JS */
             .dropped-card-banner {
-                display: flex !important;
                 border: 1px solid #000 !important;
                 background: #fff !important;
                 color: #000 !important;
@@ -770,6 +770,9 @@
         document.getElementById("printReminderVal").innerText = dailyInfo.reminder?.trim() ? dailyInfo.reminder : "-";
         document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
         document.getElementById("printPrefVal").innerText = dailyInfo.preference?.trim() ? dailyInfo.preference : "-";
+
+        // Jalankan kalkulasi ulang sebelum print untuk menyinkronkan UI & Print State
+        calculate();
 
         const originalTitle = document.title;
         const timestamp = getFormattedTimestamp();
