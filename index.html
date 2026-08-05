@@ -56,7 +56,7 @@
         }
 
         .yellow-ribbon {
-            background-color: #facc15; /* Warna Kuning */
+            background-color: #facc15;
             width: 22px;
             height: 38px;
             display: flex;
@@ -83,8 +83,8 @@
             width: 13px;
             height: 13px;
             border-radius: 50%;
-            background-color: #0f172a; /* Ring Hitam */
-            color: #facc15; /* Huruf 'i' Kuning */
+            background-color: #0f172a;
+            color: #facc15;
             font-family: serif;
             font-style: italic;
             font-weight: bold;
@@ -284,7 +284,7 @@
         .swal-ra-input { font-size: 11px !important; padding: 4px 6px !important; margin: 0 !important; height: 28px !important; width: 100% !important; }
         .swal-textarea { width: 100%; height: 46px; font-size: 11px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; resize: vertical; background: #f8fafc; }
 
-        /* CUSTOM MODAL ACTION BUTTONS (1 BARIS) */
+        /* CUSTOM MODAL ACTION BUTTONS */
         .swal-action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
         .btn-swal-action { padding: 8px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .btn-swal-save { background: #0284c7; color: white; }
@@ -313,7 +313,6 @@
             .print-only-header { display: block !important; margin-bottom: 12px; }
             .print-only-header h2 { font-size: 16px; font-weight: 800; text-transform: uppercase; color: #000; letter-spacing: 0.5px; margin-bottom: 4px; text-align: center; }
             
-            /* PRINT HEADER SUB (TANGGAL DI KIRI & PLANNER DI KANAN SEJAJAR) */
             .print-header-sub { 
                 display: flex !important; 
                 justify-content: space-between; 
@@ -340,7 +339,6 @@
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
 
-            /* CETAK DROPPED ROOM BANNER DI CETAKAN */
             .dropped-card-banner {
                 display: flex !important;
                 border: 1px solid #000 !important;
@@ -380,7 +378,6 @@
             </div>
         </div>
         
-        <!-- CAPACITY WITH YELLOW RIBBON & 'i' ICON -->
         <div class="capacity-wrapper">
             <div class="yellow-ribbon">
                 <button type="button" class="info-btn" onclick="editCapacity()" title="Edit Capacity">
@@ -394,7 +391,7 @@
         </div>
     </header>
 
-    <!-- PRINT HEADER (SEJAJAR TANGGAL & PLANNER) -->
+    <!-- PRINT HEADER -->
     <div class="print-only-header">
         <h2>ROOM ATTENDANT DISTRIBUTION</h2>
         <div class="print-header-sub">
@@ -492,7 +489,6 @@
                         <input id="creditRA" type="number" class="credit-box" value="14">
                     </div>
 
-                    <!-- AREA WARNA KUNING: RA+DW & RA+TRAINEE -->
                     <div class="summary highlight-yellow">
                         <label for="creditRaDw">Credit RA + DW</label>
                         <input id="creditRaDw" type="number" class="credit-box" value="15">
@@ -642,7 +638,6 @@
                     <tbody id="raPrintTableBody"></tbody>
                 </table>
 
-                <!-- CARD MEMANJANG: DROPPED ROOM TODAY (IKUT DICETAK SAAT PRINT DISTRIBUTION) -->
                 <div id="droppedRoomBanner" class="dropped-card-banner" style="display: none;">
                     <div class="dropped-info">
                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -705,7 +700,6 @@
         preference: ""
     };
 
-    /* PROMPT EDIT CAPACITY */
     function editCapacity() {
         Swal.fire({
             title: 'Edit Total Capacity',
@@ -743,7 +737,6 @@
         });
     }
 
-    /* FORMAT TIMESTAMP UNTUK NAMA FILE PRINT */
     function getFormattedTimestamp() {
         const now = new Date();
         const year = now.getFullYear();
@@ -756,7 +749,6 @@
         return `${year}${month}${day}_${hours}${minutes}${seconds}`;
     }
 
-    /* PRINT DISTRIBUTION DENGAN PLANNER & TIMESTAMP */
     function printDistribution() {
         const now = new Date();
         const formattedDate = now.toLocaleDateString('en-US', { 
@@ -790,7 +782,6 @@
         }, 1000);
     }
 
-    /* SWITCH TAB PANEL KIRI */
     function switchBinderTab(tabName) {
         document.getElementById('tab_btn_forecast').classList.remove('active');
         document.getElementById('tab_btn_special').classList.remove('active');
@@ -852,7 +843,6 @@
         document.getElementById(`sw_tab_content_${tabName}`).classList.add('active');
     }
 
-    /* RESET SETTINGS DEFAULTS */
     window.resetGeneralTabDefaults = function() {
         const isDailyTabActive = document.getElementById('sw_tab_content_daily')?.classList.contains('active');
 
@@ -865,32 +855,11 @@
             dailyInfo = { project: "", reminder: "", vip: "", preference: "" };
             localStorage.removeItem("dailyInfo");
         } else {
-            let stayVal = 0.8, depVal = 1, backVal = 1, pickVal = 0.4, raVal = 14, dwVal = 11, traineeVal = 5, maxStayVal = 6, spvVal = 17;
-            
-            if (typeof MANNING_RULES !== "undefined") {
-                stayVal = MANNING_RULES.credits.stayover;
-                depVal = MANNING_RULES.credits.departure;
-                backVal = MANNING_RULES.credits.dropped;
-                pickVal = MANNING_RULES.credits.pickup;
-                raVal = MANNING_RULES.targetCreditPerRA;
-                dwVal = MANNING_RULES.creditDW || 11;
-                traineeVal = MANNING_RULES.creditTrainee || 5;
-                spvVal = MANNING_RULES.targetArrivalPerSupervisor || 17;
-            }
+            let maxStayVal = 6;
 
-            if (document.getElementById('sw_stay')) document.getElementById('sw_stay').value = stayVal;
-            if (document.getElementById('sw_dep')) document.getElementById('sw_dep').value = depVal;
-            if (document.getElementById('sw_back')) document.getElementById('sw_back').value = backVal;
-            if (document.getElementById('sw_pick')) document.getElementById('sw_pick').value = pickVal;
-            if (document.getElementById('sw_creditRA')) document.getElementById('sw_creditRA').value = raVal;
-            if (document.getElementById('sw_creditRaDw')) document.getElementById('sw_creditRaDw').value = 15;
-            if (document.getElementById('sw_creditRaTrainee')) document.getElementById('sw_creditRaTrainee').value = 16;
-            if (document.getElementById('sw_creditDW')) document.getElementById('sw_creditDW').value = dwVal;
-            if (document.getElementById('sw_creditTrainee')) document.getElementById('sw_creditTrainee').value = traineeVal;
             if (document.getElementById('sw_maxStayRooms')) document.getElementById('sw_maxStayRooms').value = maxStayVal;
             if (document.getElementById('sw_maxStayOverRaDw')) document.getElementById('sw_maxStayOverRaDw').value = "";
             if (document.getElementById('sw_maxStayOverRaTrainee')) document.getElementById('sw_maxStayOverRaTrainee').value = "";
-            if (document.getElementById('sw_spv')) document.getElementById('sw_spv').value = spvVal;
 
             raCustomNames = {};
             localStorage.removeItem("raCustomNames");
@@ -930,17 +899,6 @@
         };
         localStorage.setItem("dailyInfo", JSON.stringify(dailyInfo));
 
-        document.getElementById('stayCredit').value = document.getElementById('sw_stay')?.value || 0.8;
-        document.getElementById('depCredit').value = document.getElementById('sw_dep')?.value || 1;
-        document.getElementById('backCredit').value = document.getElementById('sw_back')?.value || 1;
-        document.getElementById('pickCredit').value = document.getElementById('sw_pick')?.value || 0.4;
-        document.getElementById('creditRA').value = document.getElementById('sw_creditRA')?.value || 14;
-        document.getElementById('creditRaDw').value = document.getElementById('sw_creditRaDw')?.value || 15;
-        document.getElementById('creditRaTrainee').value = document.getElementById('sw_creditRaTrainee')?.value || 16;
-        document.getElementById('creditDW').value = document.getElementById('sw_creditDW')?.value || 11;
-        document.getElementById('creditTrainee').value = document.getElementById('sw_creditTrainee')?.value || 5;
-        document.getElementById('spvGoal').value = document.getElementById('sw_spv')?.value || 17;
-
         calculate();
         Swal.close();
         Swal.fire({ icon: 'success', title: 'Saved!', text: 'Settings updated successfully.', timer: 1500, showConfirmButton: false });
@@ -969,7 +927,7 @@
             html: `
                 <div class="binder-tab-wrapper">
                     <button id="sw_tab_btn_general" class="binder-tab active" onclick="switchSwalTab('general')">
-                        <i class="fa-solid fa-sliders"></i> General & Weights
+                        <i class="fa-solid fa-sliders"></i> General Settings
                     </button>
                     <button id="sw_tab_btn_daily" class="binder-tab" onclick="switchSwalTab('daily')">
                         <i class="fa-solid fa-calendar-day"></i> Daily Information
@@ -984,48 +942,8 @@
                             ${raInputsHTML}
                         </div>
 
-                        <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-weight-hanging"></i> WEIGHT & TARGET SETTINGS</h4>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                            <div>
-                                <label><b>Stayover Weight:</b></label>
-                                <input id="sw_stay" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('stayCredit').value}" step="0.01">
-                            </div>
-                            <div>
-                                <label><b>Departure Weight:</b></label>
-                                <input id="sw_dep" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('depCredit').value}" step="0.01">
-                            </div>
-                            <div>
-                                <label><b>Dropped Room Weight:</b></label>
-                                <input id="sw_back" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('backCredit').value}" step="0.01">
-                            </div>
-                            <div>
-                                <label><b>Pick up/Moved Weight:</b></label>
-                                <input id="sw_pick" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('pickCredit').value}" step="0.01">
-                            </div>
-                            <div>
-                                <label><b>Credit / RA Capacity:</b></label>
-                                <input id="sw_creditRA" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRA').value}" step="0.1">
-                            </div>
-                            <div>
-                                <label><b>Credit RA + DW:</b></label>
-                                <input id="sw_creditRaDw" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRaDw').value}" step="0.1">
-                            </div>
-                            <div>
-                                <label><b>Credit RA + Trainee:</b></label>
-                                <input id="sw_creditRaTrainee" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditRaTrainee').value}" step="0.1">
-                            </div>
-                            <div>
-                                <label><b>Credit DW:</b></label>
-                                <input id="sw_creditDW" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditDW').value}" step="0.1">
-                            </div>
-                            <div>
-                                <label><b>Credit Trainee:</b></label>
-                                <input id="sw_creditTrainee" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('creditTrainee').value}" step="0.1">
-                            </div>
-                        </div>
-
                         <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px; margin-top:12px;"><i class="fa-solid fa-chart-pie"></i> ALLOCATION ROLES & MAX STAYOVER</h4>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <div style="display:flex; flex-direction:column; gap:8px;">
                             <div>
                                 <label><b>Max Stayover Room:</b></label>
                                 <input id="sw_maxStayRooms" type="number" class="swal2-input swal-ra-input" value="${maxStayoverRooms}" min="0" placeholder="e.g. 6">
@@ -1037,10 +955,6 @@
                             <div>
                                 <label><b>Max Stayover (RA + Trainee):</b></label>
                                 <input id="sw_maxStayOverRaTrainee" type="number" class="swal2-input swal-ra-input" value="${maxStayOverRaTrainee || ''}" min="0" placeholder="Max stay over for RA + Trainee">
-                            </div>
-                            <div>
-                                <label><b>Supervisor Goal:</b></label>
-                                <input id="sw_spv" type="number" class="swal2-input swal-ra-input" value="${document.getElementById('spvGoal').value}">
                             </div>
                         </div>
                     </div>
@@ -1237,7 +1151,6 @@
             let allowStayover = true;
             let customMaxStay = maxStayoverRooms;
 
-            // LOGIKA FILTER NAMA (RA + DW / RA + TRAINEE)
             if (nameUpper.includes("+ DW") || nameUpper.includes("+DW")) {
                 targetCap = capacityMap.creditRaDw;
                 if (maxStayOverRaDw > 0) customMaxStay = maxStayOverRaDw;
@@ -1367,7 +1280,6 @@
             printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
         }
 
-        /* LOGIKA HITUNG SISA KREDIT / DROPPED ROOM TODAY */
         let unallocatedCredit = totalCredit - totalAllocatedCredit;
         if (unallocatedCredit > 0.05) {
             let droppedCreditFormatted = unallocatedCredit.toFixed(1);
