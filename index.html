@@ -744,8 +744,8 @@
                                 <textarea id="sw_vip" class="swal-textarea" placeholder="Input VIP in House...">${dailyInfo.vip || ''}</textarea>
                             </div>
                             <div>
-                                <label><b>Guest Preferences:</b></label>
-                                <textarea id="sw_preference" class="swal-textarea" placeholder="Notes...">${dailyInfo.notes || ''}</textarea>
+                                <label><b>Notes:</b></label>
+                                <textarea id="sw_preference" class="swal-textarea" placeholder="Input Notes...">${dailyInfo.preference || ''}</textarea>
                             </div>
                         </div>
                     </div>
@@ -1159,7 +1159,7 @@
             projectOfDay: dailyInfo.project || "",
             reminderOfDay: dailyInfo.reminder || "",
             vipInHouse: dailyInfo.vip || "",
-            Notes: dailyInfo.preference || ""
+            guestPreference: dailyInfo.preference || ""
         };
 
         fetch(GOOGLE_SCRIPT_URL, {
