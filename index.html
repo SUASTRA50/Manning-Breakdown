@@ -437,7 +437,7 @@
                             <span id="printVipVal">-</span>
                         </div>
                         <div class="print-daily-item">
-                            <b>Guest Preferences:</b>
+                            <b>Notes:</b>
                             <span id="printPrefVal">-</span>
                         </div>
                     </div>
@@ -745,7 +745,7 @@
                             </div>
                             <div>
                                 <label><b>Guest Preferences:</b></label>
-                                <textarea id="sw_preference" class="swal-textarea" placeholder="Input Guest Preferences...">${dailyInfo.preference || ''}</textarea>
+                                <textarea id="sw_preference" class="swal-textarea" placeholder="Notes...">${dailyInfo.notes || ''}</textarea>
                             </div>
                         </div>
                     </div>
@@ -1159,7 +1159,7 @@
             projectOfDay: dailyInfo.project || "",
             reminderOfDay: dailyInfo.reminder || "",
             vipInHouse: dailyInfo.vip || "",
-            guestPreference: dailyInfo.preference || ""
+            Notes: dailyInfo.preference || ""
         };
 
         fetch(GOOGLE_SCRIPT_URL, {
