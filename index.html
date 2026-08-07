@@ -180,9 +180,6 @@
                 <button class="binder-tab active" id="tab_btn_forecast" onclick="switchBinderTab('forecast')">
                     <i class="fa-solid fa-chart-line"></i> Forecast
                 </button>
-                <button class="binder-tab" id="tab_btn_special" onclick="switchBinderTab('special')">
-                    <i class="fa-solid fa-star"></i> Special Service
-                </button>
                 <button class="binder-tab" id="tab_btn_roles" onclick="switchBinderTab('roles')">
                     <i class="fa-solid fa-sliders"></i> Role Credits
                 </button>
@@ -208,11 +205,6 @@
                         <label for="departure">Departure</label>
                         <input type="number" id="departure" placeholder="0" min="0" required>
                     </div>
-                </div>
-
-                <!-- TAB 2: SPECIAL SERVICE -->
-                <div id="tab_content_special" class="binder-content">
-                    <h3><i class="fa-solid fa-star"></i> SPECIAL SERVICE</h3>
                     <div class="input-group">
                         <label for="backlog">Left Over / Dropped</label>
                         <input type="number" id="backlog" placeholder="0" min="0">
@@ -227,7 +219,7 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: SETTING ROLE -->
+                <!-- TAB 2: SETTING ROLE -->
                 <div id="tab_content_roles" class="binder-content">
                     <h3>
                         <span><i class="fa-solid fa-gear"></i> Setting Role</span>
@@ -536,11 +528,9 @@
 
     function switchBinderTab(tabName) {
         document.getElementById('tab_btn_forecast').classList.remove('active');
-        document.getElementById('tab_btn_special').classList.remove('active');
         document.getElementById('tab_btn_roles').classList.remove('active');
 
         document.getElementById('tab_content_forecast').classList.remove('active');
-        document.getElementById('tab_content_special').classList.remove('active');
         document.getElementById('tab_content_roles').classList.remove('active');
 
         document.getElementById(`tab_btn_${tabName}`).classList.add('active');
