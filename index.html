@@ -339,6 +339,7 @@
             .print-table td.center { text-align: center; }
             .print-table td.bold { font-weight: bold; }
 
+            /* PERBAIKAN CSS PRINT: Menghapus display: flex !important agar mematuhi style JS */
             .dropped-card-banner {
                 border: 1px solid #000 !important;
                 background: #fff !important;
@@ -379,7 +380,7 @@
         
         <div class="capacity-wrapper">
             <div class="yellow-ribbon">
-                <button type="button" class="info-btn" onclick="editCapacity()" title="Edit Capacity / About">
+                <button type="button" class="info-btn" onclick="editCapacity()" title="Edit Capacity">
                     <i>i</i>
                 </button>
             </div>
@@ -699,33 +700,19 @@
         preference: ""
     };
 
-    /* EDIT CAPACITY & ABOUT MODAL */
     function editCapacity() {
         Swal.fire({
-            title: 'Hotel Capacity Settings',
-            html: `
-                <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-weight: 800; font-size: 13px; color: #0284c7; letter-spacing: 0.5px;">HK WORKLOAD PLANNER</div>
-                    <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-top: 2px;">Version 2.0</div>
-                    <div style="font-size: 11px; color: #334155; margin-top: 6px; font-weight: 700;">Developed by I Made Suastra</div>
-                    <div style="font-size: 11px; margin-top: 2px;">
-                        <a href="mailto:imadesuastra@gmail.com" style="color: #0284c7; text-decoration: none; font-weight: 600;">imadesuastra@gmail.com</a>
-                    </div>
-                </div>
-                <div style="text-align: left; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">EDIT TOTAL CAPACITY (ROOMS):</div>
-                <input id="swal-input-capacity" class="swal2-input" type="number" value="${defaultCapacity}" min="1" step="1" style="margin: 0 auto; width: 100%; box-sizing: border-box; text-align: center; font-size: 14px; font-weight: 700;">
-            `,
+            title: 'Edit Total Capacity',
+            input: 'number',
+            inputValue: defaultCapacity,
+            inputAttributes: {
+                min: 1,
+                step: 1
+            },
             showCancelButton: true,
             confirmButtonText: 'Save',
             confirmButtonColor: '#0284c7',
-            cancelButtonColor: '#64748b',
-            preConfirm: () => {
-                const val = document.getElementById('swal-input-capacity').value;
-                if (!val || val < 1) {
-                    Swal.showValidationMessage('Please enter a valid room capacity');
-                }
-                return val;
-            }
+            cancelButtonColor: '#64748b'
         }).then((result) => {
             if (result.isConfirmed && result.value) {
                 let newCap = parseInt(result.value, 10);
@@ -784,6 +771,7 @@
         document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
         document.getElementById("printPrefVal").innerText = dailyInfo.preference?.trim() ? dailyInfo.preference : "-";
 
+        // Jalankan kalkulasi ulang sebelum print untuk menyinkronkan UI & Print State
         calculate();
 
         const originalTitle = document.title;
