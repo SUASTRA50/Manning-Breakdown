@@ -211,6 +211,9 @@
                 <button class="binder-tab" id="tab_btn_roles" onclick="switchBinderTab('roles')">
                     <i class="fa-solid fa-sliders"></i> Role Credits
                 </button>
+                <button class="binder-tab" id="tab_btn_tutorial" onclick="switchBinderTab('tutorial')">
+                    <i class="fa-solid fa-book-open"></i> Tutorial
+                </button>
             </div>
 
             <div class="pos-card" style="border-radius: 0 12px 12px 12px;">
@@ -284,6 +287,16 @@
                     <div class="summary" style="margin-bottom:0;">
                         <label for="spvGoal">Supervisor Goal</label>
                         <input id="spvGoal" type="number" class="credit-box" value="17">
+                    </div>
+                </div>
+
+                <!-- TAB 3: TUTORIAL (PDF USER GUIDE) -->
+                <div id="tab_content_tutorial" class="binder-content">
+                    <h3><i class="fa-solid fa-book-open"></i> User Guide & Tutorial</h3>
+                    <div style="width: 100%; height: 350px; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1;">
+                        <iframe src="Project proposal (1).pdf" style="width: 100%; height: 100%; border: none;">
+                            Browser Anda tidak mendukung pratinjau PDF. Silakan unduh file PDF secara langsung.
+                        </iframe>
                     </div>
                 </div>
             </div>
@@ -475,6 +488,14 @@
     function editCapacity() {
         Swal.fire({
             title: 'Edit Total Capacity',
+            html: `
+                <div style="font-size: 11px; color: #64748b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+                    <div style="font-weight: 700; color: #0284c7;">Version 2.0</div>
+                    <div>Developed by <b>I Made Suastra</b></div>
+                    <div><a href="mailto:imadesuastra@gmail.com" style="color: #0284c7; text-decoration: none;">imadesuastra@gmail.com</a></div>
+                </div>
+                <label style="font-size: 12px; font-weight: 600; color: #334155; display: block; margin-bottom: 4px; text-align: left;">Total Room Capacity:</label>
+            `,
             input: 'number',
             inputValue: defaultCapacity,
             inputAttributes: {
@@ -557,9 +578,11 @@
     function switchBinderTab(tabName) {
         document.getElementById('tab_btn_forecast').classList.remove('active');
         document.getElementById('tab_btn_roles').classList.remove('active');
+        document.getElementById('tab_btn_tutorial').classList.remove('active');
 
         document.getElementById('tab_content_forecast').classList.remove('active');
         document.getElementById('tab_content_roles').classList.remove('active');
+        document.getElementById('tab_content_tutorial').classList.remove('active');
 
         document.getElementById(`tab_btn_${tabName}`).classList.add('active');
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
