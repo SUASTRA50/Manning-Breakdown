@@ -9,21 +9,8 @@
     <!-- SweetAlert2 CSS & JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- KONFIGURASI / RULES DIINLINE SECARA LANGSUNG -->
-    <script>
-        const MANNING_RULES = {
-            credits: {
-                stayover: 1.0,
-                departure: 1.0,
-                dropped: 1.0,
-                pickup: 0.5
-            },
-            targetCreditPerRA: 13,
-            creditDW: 11,
-            creditTrainee: 5,
-            targetArrivalPerSupervisor: 17
-        };
-    </script>
+    <!-- IMPOR FILE RULES/KONFIGURASI -->
+    <script src="rules.js"></script>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -228,7 +215,7 @@
                 <button class="binder-tab" id="tab_btn_roles" onclick="switchBinderTab('roles')">
                     <i class="fa-solid fa-sliders"></i> Role Credits
                 </button>
-                <button class="binder-tab" id="tab_btn_tutorial" onclick="switchBinderTab('user guide')">
+                <button class="binder-tab" id="tab_btn_tutorial" onclick="switchBinderTab('tutorial')">
                     <i class="fa-solid fa-book-open"></i> User Guide
                 </button>
             </div>
@@ -307,11 +294,16 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: TUTORIAL (PDF USER GUIDE) -->
+                <!-- TAB 3: USER GUIDE (CONTAINER UNTUK PROJECT PROPOSAL JS & PDF) -->
                 <div id="tab_content_tutorial" class="binder-content">
-                    <h3><i class="fa-solid fa-book-open"></i> User Guide & Tutorial</h3>
+                    <h3><i class="fa-solid fa-book-open"></i> User Guide & Project Proposal</h3>
+                    
+                    <!-- Container khusus jika project_proposal.js melakukan render elemen ke DOM -->
+                    <div id="projectProposalContainer" style="margin-bottom: 12px; font-size: 12px; color: #334155;"></div>
+
+                    <!-- Embed Preview PDF -->
                     <div style="width: 100%; height: 350px; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1;">
-                        <iframe src="project_proposal.js" style="width: 100%; height: 100%; border: none;">
+                        <iframe src="Project_proposal.pdf" style="width: 100%; height: 100%; border: none;">
                             Browser Anda tidak mendukung pratinjau PDF. Silakan unduh file PDF secara langsung.
                         </iframe>
                     </div>
@@ -1247,6 +1239,9 @@
         });
     }
 </script>
+
+<!-- IMPOR FILE PROJECT PROPOSAL JS DI SINI -->
+<script src="project_proposal.js"></script>
 
 </body>
 </html>
