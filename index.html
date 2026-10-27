@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK WORKLOAD PLANNER</title>
+
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#0284c7">
+    <meta name="description" content="Manning Calculator - Housekeeping Calculator PWA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Manning Calc">
+    
+    <!-- PWA Icons & Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1BTk5JTkcgQ0FMQ1VMQVRPUiIsCiAgInNob3J0X25hbWUiOiAiTWFubmluZyIsCiAgImRlc2NyaXB0aW9uIjogIkhvdXNla2VlcGluZyBNYW5uaW5nIENhbGN1bGF0b3IgLSBQV0EiLAogICJzdGFydF91cmwiOiAiLi9pbmRleC5odG1sIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJzY29wZSI6ICIuLyIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2YxZjVmOSIsCiAgInRoZW1lX2NvbG9yIjogIiMwMjg0YzciLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJpY29uLTE5Mi5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbi01MTIucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9CiAgXQp9">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADcElEQVR4nO3d0W0cNxRAUVpOJWkiqSoN+NduIE3ZaSKdBM6HEUCAAVtAdmf4eM8pQByQc7Wz2iX17uXj568Lol7uvgC4kwBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpv9x9AY/yz4ff776ElPefvtx9CQ8xOgA3/X1ez/3kGEYG4Mbfy3/rMTGEce8B3Pz7mrg2owKYOME109ZoTADTJrZs0lqNCGDShPLNlDXbPoApE8n3Jqzd9gHAM20dwITfIPzY7mu4dQDwbAIgbdsAdn/p5O12XsttA4ArCIA0AZAmANIEQJoASBMAaSN3hL3VxB1Ku9n5b/iP4BWANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDa0ZviT9/Qzf/nFYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANKO/i7Qs/5Bxs++Y/SMcd/yvaa7xp3s6ADWWuvvP3576M/79c+/Lh/3rWPeOe5UHoFIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiDt+D3Bd+1rrY071dEB3HWiQW3cyTwCkSYA0gRA2tHvAZwMd824kx0dwFpOhrtq3Kk8ApEmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANKO3xJZO6CqsI3xkY4OoHZA1ekb2J/BIxBpAiBNAKQd/R7AwVjXjDvZ0QGs5WCsq8adyiMQaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAadsG8KztjFxv57XcNgC4wvF7gmsntBX28T7Su5ePn7/efRE/cvqpBKfb+fFnLY9APNHuN/9aAwKYMInMtX0Aa4lgoilrNiKAteZMKLPWakwAa82a2KppazQqgLXmTXDF+09fRq7NuADWmjvZp5q8FqM/CHs98T4vuNbkm/610QG8dsqCcK2Rj0DwKAIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYC0fwEkoJoQmz6rEwAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" sizes="512x512" href="data:image/png;base64,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">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADcElEQVR4nO3d0W0cNxRAUVpOJWkiqSoN+NduIE3ZaSKdBM6HEUCAAVtAdmf4eM8pQByQc7Wz2iX17uXj568Lol7uvgC4kwBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpv9x9AY/yz4ff776ElPefvtx9CQ8xOgA3/X1ez/3kGEYG4Mbfy3/rMTGEce8B3Pz7mrg2owKYOME109ZoTADTJrZs0lqNCGDShPLNlDXbPoApE8n3Jqzd9gHAM20dwITfIPzY7mu4dQDwbAIgbdsAdn/p5O12XsttA4ArCIA0AZAmANIEQJoASBMAaSN3hL3VxB1Ku9n5b/iP4BWANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDa0ZviT9/Qzf/nFYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANKO/i7Qs/5Bxs++Y/SMcd/yvaa7xp3s6ADWWuvvP3576M/79c+/Lh/3rWPeOe5UHoFIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiDt+D3Bd+1rrY071dEB3HWiQW3cyTwCkSYA0gRA2tHvAZwMd824kx0dwFpOhrtq3Kk8ApEmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANKO3xJZO6CqsI3xkY4OoHZA1ekb2J/BIxBpAiBNAKQd/R7AwVjXjDvZ0QGs5WCsq8adyiMQaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAadsG8KztjFxv57XcNgC4wvF7gmsntBX28T7Su5ePn7/efRE/cvqpBKfb+fFnLY9APNHuN/9aAwKYMInMtX0Aa4lgoilrNiKAteZMKLPWakwAa82a2KppazQqgLXmTXDF+09fRq7NuADWmjvZp5q8FqM/CHs98T4vuNbkm/610QG8dsqCcK2Rj0DwKAIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYC0fwEkoJoQmz6rEwAAAABJRU5ErkJggg==">
+
+    <title>MANNING CALCULATOR</title>
     <!-- FontAwesome Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 CSS & JS -->
@@ -157,7 +171,7 @@
                 <i class="fa-solid fa-building"></i>
             </div>
             <div>
-                <h1>HK WORKLOAD PLANNER</h1>
+                <h1>MANNING CALCULATOR</h1>
                 <p>Daily Staffing Tool</p>
             </div>
         </div>
@@ -202,7 +216,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="planBy">Planner Name</label>
+                    <label for="planBy">Planned by</label>
                     <input type="text" id="planBy" placeholder="Enter Name..." required>
                 </div>
             </div>
@@ -210,7 +224,10 @@
             <!-- BINDER TABS PANEL KIRI -->
             <div class="binder-tab-wrapper">
                 <button class="binder-tab active" id="tab_btn_forecast" onclick="switchBinderTab('forecast')">
-                    <i class="fa-solid fa-chart-line"></i> Planning
+                    <i class="fa-solid fa-sun"></i> AM Shift
+                </button>
+                <button class="binder-tab" id="tab_btn_pmshift" onclick="switchBinderTab('pmshift')">
+                    <i class="fa-solid fa-moon"></i> PM Shift
                 </button>
                 <button class="binder-tab" id="tab_btn_roles" onclick="switchBinderTab('roles')">
                     <i class="fa-solid fa-sliders"></i> Role Credits
@@ -221,9 +238,28 @@
             </div>
 
             <div class="pos-card" style="border-radius: 0 12px 12px 12px;">
-                <!-- TAB 1: HOTEL FORECAST -->
+                <!-- TAB 1: AM SHIFT -->
                 <div id="tab_content_forecast" class="binder-content active">
-                    <h3><i class="fa-solid fa-chart-line"></i> Workload Input</h3>
+                    <h3><i class="fa-solid fa-sun"></i> AM Shift Workload Input</h3>
+                    <div style="background:#e0f2fe; border:1px solid #bae6fd; border-radius:8px; padding:8px; margin-bottom:10px;">
+                        <div style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase; margin-bottom:6px;"><i class="fa-solid fa-users"></i> Available Manning AM</div>
+                        <div class="input-group">
+                            <label for="availRA">Available RA</label>
+                            <input type="number" id="availRA" placeholder="0" min="0" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="availDW">Available DW</label>
+                            <input type="number" id="availDW" placeholder="0" min="0" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="availTR">Available TR (Trainee)</label>
+                            <input type="number" id="availTR" placeholder="0" min="0" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="availPMShift">Available PM Shift</label>
+                            <input type="number" id="availPMShift" placeholder="Available PM Shift" min="0" value="0">
+                        </div>
+                    </div>
                     <div class="input-group">
                         <label for="roomOccPerc">Room Occ (%)</label>
                         <input type="text" id="roomOccPerc" placeholder="0%" readonly>
@@ -248,9 +284,24 @@
                         <label for="pickup">Pick up/Moved Room</label>
                         <input type="number" id="pickup" placeholder="0" min="0">
                     </div>
+                </div>
+
+                <!-- TAB 2: PM SHIFT -->
+                <div id="tab_content_pmshift" class="binder-content">
+                    <h3><i class="fa-solid fa-moon"></i> PM Shift Workload Input</h3>
+                    <div style="background:#ede9fe; border:1px solid #ddd6fe; border-radius:8px; padding:8px; margin-bottom:10px;">
+                        <div style="font-size:10px; font-weight:800; color:#7c3aed; text-transform:uppercase; margin-bottom:6px;"><i class="fa-solid fa-user-group"></i> Available Manning PM</div>
+                        <div class="input-group">
+                            <label for="availTDRA">Available TD RA</label>
+                            <input type="number" id="availTDRA" placeholder="0" min="0" value="0">
+                        </div>
+                    </div>
                     <div class="input-group">
-                        <label for="turndown">Turn Down</label>
+                        <label for="turndown">Expected TD Rooms</label>
                         <input type="number" id="turndown" placeholder="0" min="0">
+                    </div>
+                    <div style="font-size:10px; color:#64748b; background:#f8fafc; border:1px dashed #cbd5e1; padding:6px 8px; border-radius:6px; margin-top:8px;">
+                        <i class="fa-solid fa-circle-info"></i> Logic: <b>TD RA1 = Credit TD1</b>, sisa (Expected TD Rooms - TD RA1) dibagi rata ke <b>TD RA2, RA3, ...</b> sebanyak (Available TD RA - 2) untuk RA3+. Max per orang = Credit TD2 (default 0).
                     </div>
                 </div>
 
@@ -288,6 +339,21 @@
                         <input id="creditTrainee" type="number" class="credit-box" value="5">
                     </div>
 
+                    <div class="summary" style="border-top:1px dashed #cbd5e1; padding-top:8px; margin-top:4px;">
+                        <label for="creditTD1">Credit TD1</label>
+                        <input id="creditTD1" type="number" class="credit-box" value="35">
+                    </div>
+
+                    <div class="summary">
+                        <label for="creditTD2">Credit TD2</label>
+                        <input id="creditTD2" type="number" class="credit-box" placeholder="Credit TD2" value="0">
+                    </div>
+
+                    <div class="summary">
+                        <label for="creditPMShift">Credit PM Shift</label>
+                        <input id="creditPMShift" type="number" class="credit-box" placeholder="Credit PM Shift" value="5">
+                    </div>
+
                     <div class="summary">
                         <label for="spvGoal">Supervisor Goal</label>
                         <input id="spvGoal" type="number" class="credit-box" value="17">
@@ -310,7 +376,7 @@
         <div class="right-panel">
             <!-- WORKLOAD SUMMARY CARD -->
             <div class="pos-card receipt-card">
-                <h3><i class="fa-solid fa-receipt"></i> Workload Summary</h3>
+                <h3><i class="fa-solid fa-sun"></i> AM SHIFT SUMMARY</h3>
                 
                 <div class="table-header">
                     <span>Task</span>
@@ -353,6 +419,42 @@
                     <label>Total Cleaning Credit</label>
                     <span id="totalCleaning" class="total-badge">0.0</span>
                 </div>
+            </div>
+
+            <!-- PM SHIFT SUMMARY CARD -->
+            <div class="pos-card receipt-card" style="border-left:4px solid #7c3aed;">
+                <h3><i class="fa-solid fa-moon"></i> PM SHIFT SUMMARY</h3>
+                
+                <div class="table-header">
+                    <span>Task</span>
+                    <span>Qty</span>
+                    <span>Weight</span>
+                    <span>Total</span>
+                </div>
+
+                <div class="row">
+                    <span class="task-name">Expected TD Rooms</span>
+                    <input id="tdQty" type="number" readonly placeholder="0">
+                    <input id="tdCreditWeight" type="number" step="0.01" value="1">
+                    <span id="tdTotal" class="subtotal">0.0</span>
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <div class="summary">
+                    <label>Total Expected TD Credit</label>
+                    <span id="totalTurndownCredit" class="total-badge">0.0</span>
+                </div>
+                <div class="summary">
+                    <label>Available TD RA</label>
+                    <span id="displayAvailTDRA" class="total-badge" style="color:#7c3aed;">0</span>
+                </div>
+                <div style="margin-top:8px;">
+                    <div style="font-size:10px; font-weight:800; color:#7c3aed; text-transform:uppercase; margin-bottom:4px;">Expected TD Rooms Distribution</div>
+                    <div id="tdDistributionList" style="display:flex; flex-direction:column; gap:4px;"></div>
+                </div>
+                <div class="receipt-divider"></div>
+                
             </div>
 
             <!-- STAFF REQUIREMENT CARD -->
@@ -399,7 +501,7 @@
                             <b id="printDepartureVal">0</b>
                         </div>
                         <div class="print-summary-item">
-                            <span>Turn Down</span>
+                            <span>Expected TD Rooms</span>
                             <b id="printTurndownVal">0</b>
                         </div>
                         <div class="print-summary-item">
@@ -421,7 +523,8 @@
                             <th style="width: 8%;">No</th>
                             <th style="width: 25%;">Staff Name</th>
                             <th style="width: 17%;">Total Credit</th>
-                            <th style="width: 50%;">Task Allocation</th>
+                            <th style="width: 25%;">Task Allocation</th>
+			                <th style="width: 25%;">Floor</th>
                         </tr>
                     </thead>
                     <tbody id="raPrintTableBody"></tbody>
@@ -457,6 +560,18 @@
                             <b>Notes:</b>
                             <span id="printPrefVal">-</span>
                         </div>
+                        <div class="print-daily-item">
+                            <b>Houseman Incharge:</b>
+                            <span id="printHousemanVal">-</span>
+                        </div>
+                        <div class="print-daily-item">
+                            <b>Supervisor Incharge:</b>
+                            <span id="printSupervisorVal">-</span>
+                        </div>
+						<div class="print-daily-item">
+                            <b>POMED Incharge:</b>
+                            <span id="printPOMEDVal">-</span>
+                        </div>
                     </div>
                 </div>
 
@@ -474,7 +589,7 @@
 </div>
 <!-- LINK GOOGLESHEET -->
 <script>
-    const GOOGLE_SCRIPT_URL = "";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFeDsa37qoKrL9gRrja4eIRkdmv-xNYewd9ZMpr10aDWyIG0BRAEzOnurnr0Dycy4g/exec";
 
     let raCustomNames = {};
     let maxStayoverRooms = 6; 
@@ -483,11 +598,14 @@
     let defaultCapacity = 272;
 
     let dailyInfo = {
-        project: "",
-        reminder: "",
-        vip: "",
-        preference: ""
-    };
+    project: "",
+    reminder: "",
+    vip: "",
+    preference: "",
+    houseman: "",
+    supervisor: "",
+	pomed: ""
+};
 
     function editCapacity() {
         Swal.fire({
@@ -570,7 +688,10 @@
         document.getElementById("printReminderVal").innerText = dailyInfo.reminder?.trim() ? dailyInfo.reminder : "-";
         document.getElementById("printVipVal").innerText = dailyInfo.vip?.trim() ? dailyInfo.vip : "-";
         document.getElementById("printPrefVal").innerText = dailyInfo.preference?.trim() ? dailyInfo.preference : "-";
-
+        document.getElementById("printHousemanVal").innerText = dailyInfo.houseman?.trim() ? dailyInfo.houseman : "-";
+        document.getElementById("printSupervisorVal").innerText = dailyInfo.supervisor?.trim() ? dailyInfo.supervisor : "-";
+        document.getElementById("printPOMEDVal").innerText = dailyInfo.pomed?.trim() ? dailyInfo.pomed : "-";
+		
         const originalTitle = document.title;
         const timestamp = getFormattedTimestamp();
         document.title = `HK WORKLOAD PLANNER - ${timestamp}`;
@@ -583,14 +704,10 @@
     }
 
     function switchBinderTab(tabName) {
-        document.getElementById('tab_btn_forecast').classList.remove('active');
-        document.getElementById('tab_btn_roles').classList.remove('active');
-        document.getElementById('tab_btn_tutorial').classList.remove('active');
-
-        document.getElementById('tab_content_forecast').classList.remove('active');
-        document.getElementById('tab_content_roles').classList.remove('active');
-        document.getElementById('tab_content_tutorial').classList.remove('active');
-
+        ['forecast','pmshift','roles','tutorial'].forEach(t=>{
+            document.getElementById('tab_btn_'+t)?.classList.remove('active');
+            document.getElementById('tab_content_'+t)?.classList.remove('active');
+        });
         document.getElementById(`tab_btn_${tabName}`).classList.add('active');
         document.getElementById(`tab_content_${tabName}`).classList.add('active');
     }
@@ -604,6 +721,10 @@
             document.getElementById("creditRA").value = MANNING_RULES.targetCreditPerRA;
             document.getElementById("creditDW").value = MANNING_RULES.creditDW || 11;
             document.getElementById("creditTrainee").value = MANNING_RULES.creditTrainee || 5;
+            document.getElementById("creditTD1").value = MANNING_RULES.creditTD1 || 35;
+            document.getElementById("creditTD2").value = MANNING_RULES.creditTD2 !== undefined ? MANNING_RULES.creditTD2 : 0;
+            const creditPMEl = document.getElementById("creditPMShift");
+            if (creditPMEl) creditPMEl.value = MANNING_RULES.creditPMShift || 5;
             document.getElementById("spvGoal").value = MANNING_RULES.targetArrivalPerSupervisor || 17;
         }
 
@@ -651,8 +772,10 @@
             if (document.getElementById('sw_reminder')) document.getElementById('sw_reminder').value = "";
             if (document.getElementById('sw_vip')) document.getElementById('sw_vip').value = "";
             if (document.getElementById('sw_preference')) document.getElementById('sw_preference').value = "";
-
-            dailyInfo = { project: "", reminder: "", vip: "", preference: "" };
+            if (document.getElementById('sw_houseman')) document.getElementById('sw_houseman').value = "";
+            if (document.getElementById('sw_supervisor')) document.getElementById('sw_supervisor').value = "";
+			if (document.getElementById('sw_pomed')) document.getElementById('sw_pomed').value = "";
+            dailyInfo = { project: "", reminder: "", vip: "", preference: "", houseman: "" , supervisor: "" , pomed: "" };
             localStorage.removeItem("dailyInfo");
         } else {
             let maxStayVal = 6;
@@ -663,7 +786,12 @@
 
             raCustomNames = {};
             localStorage.removeItem("raCustomNames");
-            let raNeeded = Number(document.getElementById("requiredRA")?.innerText) || 10;
+            let availRA2 = Number(document.getElementById("availRA")?.value) || 0;
+            let availDW2 = Number(document.getElementById("availDW")?.value) || 0;
+            let availTR2 = Number(document.getElementById("availTR")?.value) || 0;
+            let availPM2 = Number(document.getElementById("availPMShift")?.value) || 0;
+            let totalAvail2 = availRA2 + availDW2 + availTR2 + availPM2;
+            let raNeeded = totalAvail2;
             for (let i = 1; i <= raNeeded; i++) {
                 let el = document.getElementById(`sw_ra_name_${i}`);
                 if (el) el.value = "";
@@ -672,7 +800,12 @@
     }
 
     window.saveSettingsModal = function() {
-        let raNeeded = Number(document.getElementById("requiredRA")?.innerText) || 10;
+        let availRA = Number(document.getElementById("availRA")?.value) || 0;
+        let availDW = Number(document.getElementById("availDW")?.value) || 0;
+        let availTR = Number(document.getElementById("availTR")?.value) || 0;
+        let availPM = Number(document.getElementById("availPMShift")?.value) || 0;
+        let totalAvail = availRA + availDW + availTR + availPM;
+        let raNeeded = totalAvail;
         let tempNames = {};
         for (let i = 1; i <= raNeeded; i++) {
             let val = document.getElementById(`sw_ra_name_${i}`)?.value.trim();
@@ -692,11 +825,14 @@
         localStorage.setItem("maxStayOverRaTrainee", maxStayOverRaTrainee);
 
         dailyInfo = {
-            project: document.getElementById('sw_project')?.value || "",
-            reminder: document.getElementById('sw_reminder')?.value || "",
-            vip: document.getElementById('sw_vip')?.value || "",
-            preference: document.getElementById('sw_preference')?.value || ""
-        };
+    project: document.getElementById('sw_project')?.value || "",
+    reminder: document.getElementById('sw_reminder')?.value || "",
+    vip: document.getElementById('sw_vip')?.value || "",
+    preference: document.getElementById('sw_preference')?.value || "",
+    houseman: document.getElementById('sw_houseman')?.value || "",
+    supervisor: document.getElementById('sw_supervisor')?.value || "",
+	pomed: document.getElementById('sw_pomed')?.value || ""		
+    };
         localStorage.setItem("dailyInfo", JSON.stringify(dailyInfo));
 
         calculate();
@@ -705,8 +841,13 @@
     }
 
     function openSettingsModal() {
-        let raNeeded = Number(document.getElementById("requiredRA")?.innerText) || 10;
-        if (raNeeded <= 0) raNeeded = 10;
+        let availRA = Number(document.getElementById("availRA")?.value) || 0;
+        let availDW = Number(document.getElementById("availDW")?.value) || 0;
+        let availTR = Number(document.getElementById("availTR")?.value) || 0;
+        let availPM = Number(document.getElementById("availPMShift")?.value) || 0;
+        let totalAvail = availRA + availDW + availTR + availPM;
+        let raNeeded = totalAvail;
+        if (raNeeded <= 0) raNeeded = 0;
 
         let raInputsHTML = "";
         for (let i = 1; i <= raNeeded; i++) {
@@ -737,7 +878,7 @@
                 <div class="swal-tab-body">
                     <div id="sw_tab_content_general" class="swal-tab-content active">
                         <h4 style="color:#0284c7; border-bottom:1px solid #e2e8f0; padding-bottom:4px; font-size:12px;"><i class="fa-solid fa-users"></i> STAFF NAME SETTINGS (RA)</h4>
-                        <p style="font-size:11px; color:#64748b; margin-bottom:6px;">Enter staff names to replace labels RA1, RA2, etc.:</p>
+                        <p style="font-size:11px; color:#64748b; margin-bottom:6px;">Total Tempat Karyawan yang akan muncul = Available RA + DW + TR (Trainee). Contoh: RA=8, DW=2, TR=1 = 11 box.  Pada saat Pengisian nama Staff, Gunakan Tambahan huruf DW / huruf TR untuk Trainee Contoh DW Andi, atau TR Andi, Kalo Pairing Tulis Nama RA + DW Andi, Contoh Gunawan + DW Andi untuk set role:</p>
                         <div class="swal-ra-grid" id="swalRaGrid">
                             ${raInputsHTML}
                         </div>
@@ -776,6 +917,18 @@
                             <div>
                                 <label><b>Notes:</b></label>
                                 <textarea id="sw_preference" class="swal-textarea" placeholder="Input Notes...">${dailyInfo.preference || ''}</textarea>
+                            </div>
+                            <div>
+                                <label><b>Houseman Incharge:</b></label>
+                                <textarea id="sw_houseman" class="swal-textarea" placeholder="Input Houseman Incharge...">${dailyInfo.housemen || ''}</textarea>
+                            </div>
+                            <div>
+                                <label><b>Supervisor Incharge:</b></label>
+                                <textarea id="sw_supervisor" class="swal-textarea" placeholder="Input Supervisor Incharge...">${dailyInfo.supervisor || ''}</textarea>
+                            </div>
+							<div>
+                                <label><b>POMED Incharge:</b></label>
+                                <textarea id="sw_pomed" class="swal-textarea" placeholder="Input POMED Incharge...">${dailyInfo.pomed || ''}</textarea>
                             </div>
                         </div>
                     </div>
@@ -830,7 +983,7 @@
     }
 
     const inputs = document.querySelectorAll(
-        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #stayCredit, #depCredit, #backCredit, #pickCredit, #creditRA, #creditRaDw, #creditRaTrainee, #creditDW, #creditTrainee, #spvGoal"
+        "#tonightOcc, #arrival, #departure, #backlog, #pickup, #turndown, #availRA, #availDW, #availTR, #availTDRA, #stayCredit, #depCredit, #backCredit, #pickCredit, #tdCreditWeight, #creditRA, #creditRaDw, #creditRaTrainee, #creditDW, #creditTrainee, #creditTD1, #creditTD2, #creditPMShift, #spvGoal, #availPMShift"
     );
 
     inputs.forEach(input => {
@@ -918,6 +1071,93 @@
         }
         document.getElementById("requiredSpv").innerText = spvNeeded;
 
+        // PM SHIFT CALCULATION - NEW RULE
+        let creditTD1 = Number(document.getElementById("creditTD1")?.value) || 35;
+        let creditTD2 = Number(document.getElementById("creditTD2")?.value);
+        if (isNaN(creditTD2)) creditTD2 = 0;
+        let tdWeight = Number(document.getElementById("tdCreditWeight")?.value) || 1;
+        let availTDRA = Number(document.getElementById("availTDRA")?.value) || 0;
+        // Sync Expected TD Rooms from PM tab to PM card
+        if (document.getElementById("tdQty")) document.getElementById("tdQty").value = turndown;
+        // Total Expected TD Credit diambil dari Total di Pos Card PM SHIFT SUMMARY (tdQty * weight)
+        let tdQtyCard = Number(document.getElementById("tdQty")?.value) || turndown;
+        let tdTotal = tdQtyCard * tdWeight;
+        if (document.getElementById("tdTotal")) document.getElementById("tdTotal").innerText = tdTotal.toFixed(1);
+        if (document.getElementById("totalTurndownCredit")) document.getElementById("totalTurndownCredit").innerText = tdTotal.toFixed(1);
+        if (document.getElementById("displayAvailTDRA")) document.getElementById("displayAvailTDRA").innerText = availTDRA;
+
+        // NEW LOGIC v4: TD RA1 = Credit TD1, TD RA2 = Credit TD2, sisa dibagi ke RA3,4,...
+        // DISTRIBUTION DARI TOTAL EXPECTED TD CREDIT (KUNING) DI POS CARD PM SHIFT SUMMARY
+        let tdList = [];
+        let totalExpectedTDRooms = Number(document.getElementById("tdQty")?.value) || turndown;
+        let totalExpectedTDCredit = Number(document.getElementById("tdTotal")?.innerText) || (totalExpectedTDRooms * tdWeight);
+        let totalToDistribute = totalExpectedTDCredit;
+        if (totalToDistribute > 0 && availTDRA > 0) {
+            // REVISI FINAL: RA1 harus = Credit TD1, RA2 = Credit TD2 (fixed), sisanya dibagi RA3+
+            let tdRA1Credit = creditTD1;
+            let tdRA1Rooms = tdWeight > 0 ? tdRA1Credit / tdWeight : tdRA1Credit;
+            let tdRA2Credit = 0;
+            let tdRA2Rooms = 0;
+            if (availTDRA >= 2) {
+                tdRA2Credit = creditTD2;
+                tdRA2Rooms = tdWeight > 0 ? tdRA2Credit / tdWeight : tdRA2Credit;
+            }
+            let afterRA2Credit = totalToDistribute - tdRA1Credit - tdRA2Credit;
+            let remainingStaff = Math.max(0, availTDRA - 2);
+            let perRemainingCredit = 0;
+            let perRemainingRooms = 0;
+            if (remainingStaff > 0) {
+                perRemainingCredit = afterRA2Credit / remainingStaff;
+                perRemainingRooms = tdWeight > 0 ? perRemainingCredit / tdWeight : perRemainingCredit;
+            }
+            tdList.push({ name: 'TD RA1', rooms: tdRA1Rooms, credit: tdRA1Credit, isLead: true });
+            if (availTDRA >= 2) {
+                tdList.push({ name: 'TD RA2', rooms: tdRA2Rooms, credit: tdRA2Credit, isLead: false });
+            }
+            let leftCredit = afterRA2Credit;
+            for (let i=3; i<=availTDRA; i++) {
+                let allocCredit = leftCredit;
+                if (remainingStaff > 0) {
+                    allocCredit = (i < availTDRA) ? perRemainingCredit : leftCredit;
+                }
+                let allocRooms = tdWeight > 0 ? allocCredit / tdWeight : allocCredit;
+                tdList.push({ name: 'TD RA' + i, rooms: allocRooms, credit: allocCredit, isLead: false });
+                leftCredit -= allocCredit;
+                if (leftCredit <= 0.001 && i < availTDRA) {
+                    for (let j=i+1; j<=availTDRA; j++) {
+                        tdList.push({ name: 'TD RA' + j, rooms: 0, credit: 0, isLead: false });
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Render distribution
+        const distContainer = document.getElementById("tdDistributionList");
+        if (distContainer) {
+            distContainer.innerHTML = "";
+            if (tdList.length === 0) {
+                distContainer.innerHTML = `<div style="font-size:11px; color:#94a3b8; text-align:center; padding:4px;">No Expected TD Rooms allocation</div>`;
+            } else {
+                tdList.forEach(item => {
+                    let div = document.createElement("div");
+                    div.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:#f5f3ff; border:1px solid #ddd6fe; border-radius:6px; padding:5px 8px; font-size:11px;";
+                    div.innerHTML = `<span style="font-weight:700; color:${item.isLead ? '#7c3aed' : '#475569'}"><i class="fa-solid fa-user-check"></i> ${item.name}</span><span style="font-weight:600;">${item.rooms.toFixed(1)} rooms / ${item.credit.toFixed(1)} credit</span>`;
+                    distContainer.appendChild(div);
+                });
+            }
+        }
+
+        if (document.getElementById("requiredTD1")) if(document.getElementById("requiredTD1")) document.getElementById("requiredTD1").innerText = tdList[0] ? `${tdList[0].rooms.toFixed(1)} rooms / ${tdList[0].credit.toFixed(1)} credit` : "0";
+        if (document.getElementById("requiredTD2")) {
+            if (tdList.length > 1) {
+                let remC = tdList.length > 2 ? (totalToDistribute - tdList[0].credit - tdList[1].credit) / Math.max(1, tdList.length-2) : 0;
+                if(document.getElementById("requiredTD2")) document.getElementById("requiredTD2").innerText = `${remC.toFixed(1)} credit / person`;
+            } else {
+                if(document.getElementById("requiredTD2")) document.getElementById("requiredTD2").innerText = "0";
+            }
+        }
+
         generateRADistribution(raNeeded, total, { creditRA, creditRaDw, creditRaTrainee, creditDW, creditTrainee }, {
             stayover, departure, backlog, pickup, turndown
         }, {
@@ -936,7 +1176,7 @@
 
         if (raNeeded <= 0 || totalCredit <= 0) {
             listContainer.innerHTML = `<div style="text-align:center; font-size:11px; color:#94a3b8; padding:8px;">No task allocation yet.</div>`;
-            printTableBody.innerHTML = `<tr><td colspan="4" class="center">No task allocation yet.</td></tr>`;
+            printTableBody.innerHTML = `<tr><td colspan="5" class="center">No task allocation yet.</td></tr>`;
             if (droppedBanner) {
                 droppedBanner.style.display = "none";
                 droppedBanner.classList.add("hidden-print");
@@ -954,18 +1194,59 @@
             let allowStayover = true;
             let customMaxStay = maxStayoverRooms;
 
-            if (nameUpper.includes("+ DW") || nameUpper.includes("+DW")) {
-                targetCap = capacityMap.creditRaDw;
-                if (maxStayOverRaDw > 0) customMaxStay = maxStayOverRaDw;
-            } else if (nameUpper.includes("+ TRAINEE") || nameUpper.includes("+TRAINEE")) {
-                targetCap = capacityMap.creditRaTrainee;
-                if (maxStayOverRaTrainee > 0) customMaxStay = maxStayOverRaTrainee;
-            } else if (nameUpper.startsWith("DW")) {
-                targetCap = Math.min(capacityMap.creditDW, 12);
-                allowStayover = false;
-            } else if (nameUpper.startsWith("TRAINEE")) {
-                targetCap = Math.min(capacityMap.creditTrainee, 12);
-                allowStayover = false;
+            // --- FIX DW DETECTION: whole word only, Dwi != DW ---
+             const hasDWToken = /\bDW\b/.test(nameUpper);
+    const hasTraineeToken = /\bTRAINEE\b/.test(nameUpper) || /\bTR\b/.test(nameUpper);
+    const hasPMToken = /\bPM\b/.test(nameUpper); // Tambahan deteksi PM
+    const hasPlusDW = /\+\s*DW\b/.test(nameUpper);
+    const hasPlusTrainee = /\+\s*(TRAINEE|TR)\b/.test(nameUpper);
+    const hasPlusPM = /\+\s*PM\b/.test(nameUpper); // Tambahan jika ada format + PM
+    const startsWithDW = /^DW\b/.test(nameUpper);
+    const startsWithTrainee = /^(TRAINEE|TR)\b/.test(nameUpper);
+    const startsWithPM = /^PM\b/.test(nameUpper); // Tambahan jika diawali PM
+
+    if (hasPlusDW) {
+        targetCap = capacityMap.creditRaDw;
+        if (maxStayOverRaDw > 0) customMaxStay = maxStayOverRaDw;
+    } else if (hasPlusTrainee || hasPlusPM) {
+        targetCap = 5; // TR dan PM disamakan mendapat credit 5
+        if (maxStayOverRaTrainee > 0) customMaxStay = maxStayOverRaTrainee;
+    } else if (startsWithDW && hasDWToken) {
+        targetCap = Math.min(capacityMap.creditDW, 12);
+        allowStayover = false;
+    } else if ((startsWithTrainee && hasTraineeToken) || (startsWithPM && hasPMToken)) {
+        targetCap = 5; // TR dan PM disamakan mendapat credit 5
+        allowStayover = false;
+    } else if (hasDWToken && !hasTraineeToken && !hasPMToken) {
+        // Case: Name contains DW as separate word
+        if (/\bDW\b/.test(nameUpper) && nameUpper.split(' ').length <= 2) {
+            // optional: keep as DW if explicit
+        }
+    }
+    
+    // Additional safety untuk TR dan PM agar targetCap tetap 5
+    if ((hasTraineeToken || hasPMToken) && !hasPlusDW) {
+        targetCap = 5;
+        allowStayover = false;
+    }
+            // Additional safety: if name is exactly DW token, ensure credit DW = 11 (from rules)
+            if (hasDWToken && !hasPlusDW && !hasPlusTrainee) {
+                // If nameUpper is exactly "DW" or "DW <name>" or "<name> DW", treat as DW role
+                if (startsWithDW || /\bDW\b/.test(nameUpper)) {
+                    // Only override if not already assigned as RA+DW (which has higher capacity)
+                    if (targetCap === capacityMap.creditRA) {
+                        // Check if it's pure DW role (no RA prefix)
+                        if (/^DW\b/.test(nameUpper) || (hasDWToken && !/RA\d*/.test(nameUpper))) {
+                            targetCap = Math.min(capacityMap.creditDW, 12);
+                            allowStayover = false;
+                        }
+                    }
+                }
+            }
+            // Credit 11 for DW role enforcement
+            if (hasDWToken && targetCap === capacityMap.creditDW) {
+                // Ensure DW gets 11 credit as requested
+                targetCap = 11;
             }
 
             raAllocations.push({ 
@@ -1072,9 +1353,10 @@
             let tr = document.createElement("tr");
             tr.innerHTML = `
                 <td class="center">${displayedIndex}</td>
-                <td class="bold">${ra.name}</td>
-                <td class="center">${ra.credit.toFixed(1)} / ${ra.targetCap}</td>
-                <td>${taskText}${specialPrintText}</td>
+    <td class="bold">${ra.name}</td>
+    <td class="center">${ra.credit.toFixed(1)} / ${ra.targetCap}</td>
+    <td>${taskText}${specialPrintText}</td>
+    <td></td> 
             `;
             printTableBody.appendChild(tr);
         });
@@ -1169,13 +1451,15 @@
         const getValue = (id) => document.getElementById(id)?.value || "0";
         const getText = (id) => document.getElementById(id)?.innerText || "0";
 
+        let expectedTDRoomsVal = document.getElementById("tdQty")?.value || document.getElementById("turndown")?.value || "0";
         const payload = {
             tonightOcc: getValue("tonightOcc"),
             arrival: getValue("arrival"),
             departure: getValue("departure"),
             backlog: getValue("backlog"),
             pickup: getValue("pickup"),
-            turndown: getValue("turndown"),
+            turndown: expectedTDRoomsVal,
+            expectedTDRooms: expectedTDRoomsVal,
             stayQty: getValue("stayQty"),
             totalCleaning: getText("totalCleaning"),
             creditRA: getValue("creditRA"),
@@ -1233,6 +1517,18 @@
             btn.innerHTML = `<i class="fa-solid fa-box-archive"></i> ARCHIVE`;
         });
     }
+</script>
+
+
+<script>
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW failed:', err));
+  });
+}
 </script>
 
 </body>
